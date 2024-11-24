@@ -11,14 +11,34 @@ const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const config_1 = require("@nestjs/config");
+const auth_module_1 = require("./auth/auth.module");
+const user_module_1 = require("./user/user.module");
+const typeorm_1 = require("@nestjs/typeorm");
+const user_entity_1 = require("./user/entities/user.entity");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule.forRoot({
+        imports: [
+            typeorm_1.TypeOrmModule.forRootAsync({
+                inject: [config_1.ConfigService],
+                useFactory: (config) => ({
+                    type: 'mysql',
+                    host: config.get('DB_HOST'),
+                    port: config.get('DB_PORT'),
+                    username: config.get('DB_USERNAME'),
+                    password: config.get('DB_PASSWORD'),
+                    database: config.get('DB_DATABASE'),
+                    entities: [user_entity_1.User],
+                    synchronize: true
+                })
+            }),
+            config_1.ConfigModule.forRoot({
                 isGlobal: true,
-            })],
+            }),
+            auth_module_1.AuthModule, user_module_1.UserModule
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
