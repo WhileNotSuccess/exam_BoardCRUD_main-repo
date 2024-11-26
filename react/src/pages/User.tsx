@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { Axios } from '../lib/axios'
-import { UserDetail } from '../common/types'
+import { useAuth } from '../hooks/auth'
 
 const User = () => {
-    const [user, setUser] = useState<UserDetail>()
-    useEffect(()=>{
-        async function effect(){
-            const response = await Axios.get('/user/test')
-            if(response.status === 200){
-                setUser(response.data)
-            }
-        }
-        effect()
-    },[]
-    )
+    const {user, isLoading, logout} = useAuth()
+    console.log(user)
+    console.log(isLoading)
   return (
     <div>
       <div>id:{user?.id}</div>
       <div>name:{user?.name}</div>
       <div>profile: <img src={`${user?.profilePicture}`} alt="profile" /></div>
       <div>googleId:{user?.googleId}</div>
+      <div><button onClick={()=>{logout()}}>로그아웃</button></div>
     </div>
   )
 }

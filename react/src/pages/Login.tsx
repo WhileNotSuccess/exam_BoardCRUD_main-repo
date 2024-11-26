@@ -1,6 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useAuth } from '../hooks/auth'
 
 const Login = () => {
+  const {user, isLoading} = useAuth()
+
+  useEffect(()=>{
+    if(!isLoading && user){
+      window.location.href = '/user'
+    }
+  },[user,isLoading])
+  
   const baseUrl = import.meta.env.VITE_BACKEND_URL
   return (
     <div>

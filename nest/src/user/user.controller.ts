@@ -10,7 +10,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({summary:'유저 로그인 테스트'})
+  @ApiOperation({summary:'로그인된 유저의 정보'})
   @ApiResponse({
     status:HttpStatus.OK,
     example:{
@@ -21,7 +21,7 @@ export class UserController {
     }
   })
   @UseGuards(AuthGuard('jwt'))
-  @Get('test')
+  @Get('info')
   test(@Req() request){
     return request.user
   }
