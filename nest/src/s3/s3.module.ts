@@ -1,0 +1,11 @@
+import { Module } from '@nestjs/common';
+import { S3Service } from './s3.service';
+import { S3Controller } from './s3.controller';
+import { NestjsFormDataModule } from 'nestjs-form-data';
+
+@Module({
+  imports:[NestjsFormDataModule],
+  providers: [S3Service],
+  controllers: [S3Controller]
+})
+export class S3Module {}
