@@ -8,11 +8,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { PostModule } from './post/post.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      inject:[ConfigService],
+      inject:[ConfigService], //의존 provider 
       useFactory:(config:ConfigService)=>({
         type:'mysql',
         host:config.get<string>('DB_HOST'),
@@ -27,7 +29,7 @@ import { JwtModule } from '@nestjs/jwt';
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule],
+  AuthModule, UserModule,PostModule,CategoryModule],
   controllers: [AppController],
   providers: [AppService],
 })
