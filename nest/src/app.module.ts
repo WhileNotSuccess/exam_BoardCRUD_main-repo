@@ -8,9 +8,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { S3Module } from './s3/s3.module';
+import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 
 @Module({
   imports: [
+    NestjsFormDataModule.config({storage:MemoryStoredFile}),
     TypeOrmModule.forRootAsync({
       inject:[ConfigService],
       useFactory:(config:ConfigService)=>({
@@ -27,7 +30,7 @@ import { JwtModule } from '@nestjs/jwt';
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule],
+  AuthModule, UserModule, S3Module],
   controllers: [AppController],
   providers: [AppService],
 })

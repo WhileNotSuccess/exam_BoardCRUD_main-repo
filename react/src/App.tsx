@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "./pages/Login"
 import User from "./pages/User"
 import Main from "./pages/Main"
+import ImageUpload from "./test/ImageUpload"
 
 function App() {
   return(
@@ -10,6 +11,7 @@ function App() {
       <Route  path="/" element={<Main/>}/>
       <Route path="/login" element={<Login />}/>
       <Route path="/user" element={<User />}/>
+      <Route path="/image-test" element={<ImageUpload />}/>
     </Routes>
   </BrowserRouter>
   )
