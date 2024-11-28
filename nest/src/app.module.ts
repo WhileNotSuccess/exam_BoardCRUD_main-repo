@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { JwtModule } from '@nestjs/jwt';
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule],
+  AuthModule, UserModule, CommentsModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -31,7 +31,7 @@ class MyUploadAdapter {
 
         // 서버에 이미지 파일 전송
         const res = await Axios.post(
-          "http://localhost:8000/api/image-upload",
+          "http://localhost:3012/s3/image-upload",
           data,
           {
             headers: {
@@ -40,7 +40,7 @@ class MyUploadAdapter {
           }
         );
 
-        const imgUrl = res.data; // 서버에서 반환된 이미지 URL 저장
+        const imgUrl = res.data.url; // 서버에서 반환된 이미지 URL 저장
         resolve({
           default: imgUrl, // 에디터에서 사용할 기본 이미지 URL 반환
         });

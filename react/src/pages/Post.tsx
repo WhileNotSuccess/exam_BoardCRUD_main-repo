@@ -20,18 +20,18 @@ class MyUploadAdapter {
     // default는 url이고 url은 문자열로 사용되기 때문에 string으로 지정
     try {
       const file = await this.loader.file; // 사용자가 선택한 파일에 접근
-      const data = new FormData();
+      const data = new FormData(); // 왜 formdata로 보냈는지? : 파일은 바이너리 데이터라서 일반 json형식은 코드가 길어져 가독성이 떨어짐, 서버가 폼데이터로 보내라고 지정해놓음
       data.append("image", file);
 
       const res = await Axios.post(
-        "http://localhost:8000/api/image-upload",
+        "http://localhost:3012/s3/image-upload",
         data,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
 
-      return { default: res.data }; // ck에디터에 반환된 url을 전달, default는 ck에디터에서 기본적으로 사용하는 키 이름
+      return { default: res.data.url }; // ck에디터에 반환된 url을 전달, default는 ck에디터에서 기본적으로 사용하는 키 이름
     } catch (error) {
       throw error;
     }
@@ -57,12 +57,15 @@ const Post: React.FC = () => {
   }, [user, isLoading, navigate]);
 
   const adapter = (editorInstance: any) => {
+    
     // 타입스크립트가 ck에디터의 editorInstance 타입을 정확하게 알지 못하기 때문, 타입이 정확하지 않으면 any를 사용
     editorInstance.plugins.get("FileRepository").createUploadAdapter = (
-      // ck에디터에 파일을 업로드 하고 url을 ck에디터에 삽입하는 역할
+      // FileRepository는 파일 업로드와 관련된 플러그인 
+      // createUploadAdapter가 하는 역할?
+      // 파일 업로드를 처리할 어댑터를 생성해주는 역할이지만 기본적으로는 loader를 받아서 사용
       loader: any
     ) => {
-      return new MyUploadAdapter(loader); // 따로 정의한 MyUploadAdapter를 사용하도록 설정
+      return new MyUploadAdapter(loader); // 따로 정의한 MyUploadAdapter에 loader를 넘겨주고 사용할수 있도록 설정
     };
   };
 
@@ -128,10 +131,13 @@ const Post: React.FC = () => {
               editor={ClassicEditor} // 간단한 텍스트 편집기를 사용할때 사용하는 에디터
               data="" // 초기 데이터는 빈 문자열로 설정
               onReady={(editorInstance) => {
+                // 에디터를 조작하거나 상호작용하기 위한 인스턴스, 이 코드에서는 이미지 업로드 플러그인을 가져오기 위해 사용
                 // ck에디터가 준비 되었을 때 이미지 업로드 기능을 사용할수 있게
                 adapter(editorInstance);
               }}
               onChange={(_, editorInstance) => {  // onchange를 쓰려면 두번째 인자에 줘야 하는데 기본적인 첫번째 인자를 event로 줘버리면 ts에서 에러
+                // onChange의 첫번째 인자의 하는 역할?
+                // 첫번째 인자가 하는 역할은 사용자가 클릭한 위치를 가져오거나, 클릭한 위치에 따라 정교한작업을 할때 사용한다. 이 코드에서는 단순히 글 내용만 변경하기에 사용하지 않음
                 // onchange만 쓸거면 두번째 인자를 써야함 ( 데이터 가져오기, 수정하기 )
                 setContent(editorInstance.getData()); // 사용자가 입력한 html형식의 내용을 content변수에 저장
               }}
