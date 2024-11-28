@@ -24,7 +24,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: Profile,
     done: VerifyCallback,
   ) {
-    throw new BadGatewayException('test');
     const user = await this.authService.validateUser({
         googleId:profile.id,
         name:profile.displayName,

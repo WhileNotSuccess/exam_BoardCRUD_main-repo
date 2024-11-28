@@ -1,12 +1,8 @@
 import useSWR from 'swr'
-import { useEffect } from 'react'
 import { Axios } from '../lib/axios';
 import cookie from 'react-cookies'
-import { useLocation } from 'react-router-dom';
 
 export const useAuth = () => {
-    const location = useLocation()
-    const currentPath = location.pathname
     
     // swr로 요청을 보낸 후, 데이터를 받아온다.
     // data는 성공시, error은 실패시 받아오고, data의 이름을 user로 바꾼다.
@@ -28,14 +24,6 @@ export const useAuth = () => {
         cookie.remove('auth_token')
         window.location.href = '/'
     }
-
-    useEffect(() => {
-        if (error && currentPath !== '/login'){
-            alert('로그인이 만료 되었습니다.')
-            cookie.remove('auth_token')
-            window.location.href = '/login'
-        }
-    }, [user, error])
 
     return {
         user,

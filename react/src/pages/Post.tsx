@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import "../css/PostComp.css";
-import { UserInfoCompo } from "../components/MainComp";
-import { CategoryCompo } from "../components/CategoryCompo";
+import "../styles/PostComp.css";
+import UserInfoCompo from "../components/UserInfoComp";
+import { CategoryCompo } from "../components/CategoryComp";
 import {Axios} from "../lib/axios";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
