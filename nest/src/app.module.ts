@@ -9,9 +9,13 @@ import { User } from './user/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { CommentsModule } from './comments/comments.module';
+import { S3Module } from './s3/s3.module';
+import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 
 @Module({
   imports: [
+    NestjsFormDataModule.config({storage:MemoryStoredFile}),
+    
     TypeOrmModule.forRootAsync({
       inject:[ConfigService],
       useFactory:(config:ConfigService)=>({
@@ -28,7 +32,7 @@ import { CommentsModule } from './comments/comments.module';
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule, CommentsModule],
+  AuthModule, UserModule, CommentsModule,S3Module],
   controllers: [AppController],
   providers: [AppService],
 })
