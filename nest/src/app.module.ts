@@ -15,7 +15,7 @@ import { CategoryModule } from './category/category.module';
   imports: [
     TypeOrmModule.forRootAsync({
       inject:[ConfigService], //의존 provider 
-      useFactory:(config:ConfigService)=>({
+      useFactory:(config:ConfigService)=>({ 
         type:'mysql',
         host:config.get<string>('DB_HOST'),
         port:config.get<number>('DB_PORT'),
