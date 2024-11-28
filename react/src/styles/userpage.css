@@ -1,0 +1,98 @@
+.info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  position: relative;
+  min-height: 100vh;
+  padding: 0 3%;
+  box-sizing: border-box;
+}
+
+.info-list {
+  width: 52vw;
+  margin-top: 1%;
+  background: rgba(210, 223, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-width: 0 0 2px 0;
+}
+
+.info-title {
+  flex: 1;
+  text-align: left;
+  margin-left: 10px;
+}
+
+.info-date {
+  margin-left: auto;
+}
+
+.info-name {
+  margin-left: 2%;
+}
+
+.info-select {
+  display: flex;
+
+  flex-direction: row;
+  border-width: 2px 0 2px 0;
+  border-style: solid;
+}
+
+.select-post {
+  border: 0;
+  background-color: transparent;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.select-comment {
+  border: 0;
+  background-color: transparent;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 25px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.select-post:hover,
+.select-comment:hover {
+  background: #d2dfff;
+}
+
+.select-post.active,
+.select-comment.active {
+  background: #b3c6ff;
+  color: #fff;
+}
+
+.down-banner {
+  width: 100%;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(4, 74, 254, 0.3);
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.down-banner button {
+  margin: 0 10px;
+}
