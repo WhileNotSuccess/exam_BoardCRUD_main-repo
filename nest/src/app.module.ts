@@ -6,6 +6,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { CommentsModule } from './comments/comments.module';
 import { S3Module } from './s3/s3.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 
@@ -29,7 +32,7 @@ import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule, S3Module],
+  AuthModule, UserModule, CommentsModule,S3Module],
   controllers: [AppController],
   providers: [AppService],
 })
