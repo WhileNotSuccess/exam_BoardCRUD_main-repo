@@ -17,7 +17,7 @@ export const CategoryCompo = () => {
   const categoryList = useTypedSelector((state) => state.categoryList);
   const navigate = useNavigate();
   const fetchCategories = async () => {
-    const { data } = await axios.get("http://localhost:8000/api/category");
+    const { data } = await axios.get("http://localhost:3012/api/category");
     dispatch({ type: "CATEGORYLIST_UPLOAD", payload: data.data });
   };
 

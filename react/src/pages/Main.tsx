@@ -39,7 +39,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
         // 메인 페이지 글 가져오기
         const { data } = await axios.get(
           // axios로 페이지의 원하는 값을 쿼리로 구분해서 가져와서 구조분해할당으로 안에서 data의 값만 가져오기
-          `http://localhost:8000/api/posts?category=${category}&limit=${postPerPage}&page=${page}
+          `http://localhost:3012/api/posts?category=${category}&limit=${postPerPage}&page=${page}
         `
         );
         // 가져온 값을 state에 설정
@@ -54,7 +54,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
       const fetchNotions = async () => {
         // 공지사항 글 가져오기
         const { data } = await axios.get(
-          `http://localhost:8000/api/posts?category=공지사항&limit=2
+          `http://localhost:3012/api/posts?category=공지사항&limit=2
         `
         );
         setNotion(data.data);

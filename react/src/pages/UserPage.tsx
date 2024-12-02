@@ -33,7 +33,7 @@ const UserPage = () => {
   // 작성글 데이터를 가져오는 함수
   const postData = async (page:number) => {
     const { data } = await axios.get(
-      `http://localhost:8000/api/search?content=${author}&target=author&limit=${postPerPage}&page=${page}`
+      `http://localhost:3012/api/search?content=${author}&target=author&limit=${postPerPage}&page=${page}`
     );
     setUserData(data.data);
     setPrevPage(data.prevPage);
@@ -46,7 +46,7 @@ const UserPage = () => {
   const commentData = async (page:number) => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/find-post-by-comment?limit=10&page=${page}`,
+        `http://localhost:3012/api/find-post-by-comment?limit=10&page=${page}`,
         {
           headers: {
             nickName: `${author}`,

@@ -88,7 +88,7 @@ const Post: React.FC = () => {
       formData.append("category", boardName);
 
       const res = await Axios.post(
-        `http://localhost:8000/api/posts?category=${boardName}`,
+        `http://localhost:3012/api/posts?category=${boardName}`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -123,7 +123,7 @@ const Post: React.FC = () => {
           <input placeholder="제목" onChange={titlechange} />
         </div>
         <div className="user-name">
-          <>작성자 : {user ? user.nick_name : "로딩 중..."}</>
+          <>작성자 : {user ? user.name : "로딩 중..."}</>
         </div>
         <div className="content-write">
           <div className="ckeditor">
@@ -154,7 +154,7 @@ const Post: React.FC = () => {
         </div>
       </div>
       <div>
-        <UserInfoCompo user={user} />
+        <UserInfoCompo />
       </div>
     </div>
   );
