@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 @Entity()
@@ -13,9 +13,8 @@ export class Post{ //Post 테이블
     author:string;
     @Column()
     category:string;
-    @Column()
+    @CreateDateColumn()
     created_at:string;
-    @Column()
+    @UpdateDateColumn()
     updated_at:string;
-
 }

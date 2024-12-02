@@ -19,13 +19,13 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
   async handleRedirect(@Req() request, @Res() response) {
-    const user = request.user
-    const token = await this.authService.login(user)
+    const user = request.user //사용자 정보
+    const token = await this.authService.login(user) //jwt 토큰 생성
     response.cookie('auth_token', token.access_token,{
-      httpOnly:false,
-      secure:false,
-      maxAge:1000*60*60,
-      sameSite:'Lax'
+      httpOnly:false, //클라이언트의 쿠키 접근 허용 여부
+      secure:false,   
+      maxAge:1000*60*60, //유효기간 1시간
+      sameSite:'Lax' //cross-site 요청 제한
     })
     response.redirect(`${process.env.FRONTEND_URL}/user`)
   }

@@ -1,3 +1,4 @@
+import { PaginationDTO } from "./pagination.dto";
 import { IsString } from "class-validator";
 
 export class postDTO{
@@ -5,8 +6,6 @@ export class postDTO{
     title:string;
     @IsString()
     content:string;
-    @IsString()
-    author:string;
     @IsString()
     category:string;
 }

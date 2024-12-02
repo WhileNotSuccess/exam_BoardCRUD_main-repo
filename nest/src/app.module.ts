@@ -10,6 +10,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
+import { Post } from './post/entities/post.entity';
+import { Category } from './category/entities/category.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { CategoryModule } from './category/category.module';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User],
+        entities:[User,Post,Category],
         synchronize:true
       })
     }),

@@ -5,4 +5,5 @@ export declare class AppController {
     getHello(): {
         data: string;
     };
+    getUser(req: any): any;
 }
