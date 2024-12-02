@@ -3,25 +3,23 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Category } from "./entities/category.entity";
 import { DataSource, Repository } from "typeorm";
 import { CategoryDTO } from "./dto/category.dto";
+import { error } from "console";
 
 @Injectable()
 export class CategoryService{
     constructor(
-        @InjectRepository(Category)private readonly repository:Repository<Category>,
         private readonly dataSource:DataSource
     ){}
     queryRunner=this.dataSource.createQueryRunner();
     
     // 카테고리 이름 받기
     async getCategory(){
-        console.log('1');
-        const cate= await this.repository.find();
-        console.log('2',cate);
+        const cate= await this.queryRunner.manager.find(Category)
         return cate;
     }
     //카테고리 신규 작성
     async postCategory(body:CategoryDTO){
-        const category=await this.repository.exists({where:{name:body.name}})
+        const category= await this.queryRunner.manager.exists(Category,{where:{name:body.name}})
         if(category){
             throw new ConflictException('already exists name')
         }else{
@@ -30,14 +28,14 @@ export class CategoryService{
             try {
                 await this.queryRunner.manager.save(Category,body)
                 await this.queryRunner.commitTransaction()
+                return 'post success'
             } catch (e) {
                 await this.queryRunner.rollbackTransaction();
-                throw e
+                throw error(e)
             }finally{
                 await this.queryRunner.release()
             }
         }
-        
     }
     //카테고리 삭제
     async deleteCategory(id:number){
@@ -46,12 +44,14 @@ export class CategoryService{
         try{
             await this.queryRunner.manager.delete(Category,id);
             await this.queryRunner.commitTransaction();
+            return 'delete success'
         }catch(e){
             await this.queryRunner.rollbackTransaction();
-            throw e
+            throw error(e)
         }finally{
             await this.queryRunner.release();
         }
+        
     }
     //카테고리 이름 변경
     async updateCategory(id:number,body:CategoryDTO){
@@ -60,9 +60,10 @@ export class CategoryService{
         try {
             await this.queryRunner.manager.update(Category,id,body)
             await this.queryRunner.commitTransaction();
+            return 'put success' 
         } catch (e) {
             await this.queryRunner.rollbackTransaction();
-            throw e
+            throw error(e)
         }finally{
             await this.queryRunner.release();
         }

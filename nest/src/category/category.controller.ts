@@ -4,30 +4,29 @@ import { CategoryDTO } from "./dto/category.dto";
 import { AuthGuard } from "@nestjs/passport";
 
 
+
 @Controller('category')
 export class CategoryController{
     constructor(
         private readonly service:CategoryService
     ){}
-
     @Get()
-    getCategory(){
-        return this.service.getCategory()
+    async getCategory(){
+        return await this.service.getCategory()
     }
-
-    // @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('jwt'))
     @Post()
-    postCategory(@Body()body:CategoryDTO){
-        return this.service.postCategory(body)
+    async postCategory(@Body()body:CategoryDTO){
+        return await this.service.postCategory(body)
     }
     @UseGuards(AuthGuard('jwt'))
     @Put(':id')
-    putCategory(@Param()id:number,@Body()body:CategoryDTO){
-        return this.service.updateCategory(id,body)
+    async putCategory(@Param()id:number,@Body()body:CategoryDTO){
+        return await this.service.updateCategory(id,body)
     }
     @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
-    deleteCategory(@Param()id:number){
-        return this.service.deleteCategory(id)
+    async eleteCategory(@Param()id:number){
+        return await this.service.deleteCategory(id)
     }
 }

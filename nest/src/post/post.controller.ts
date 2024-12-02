@@ -13,13 +13,13 @@ export class PostController{
     ){}
     @Get('check')
     re(){
-        return 'hello'
+        return this.post.check()
     }
     @Get() //pagination 메인 페이지 post
     findAll(@Query('skip')skip:number,
             @Query('limit')limit:number,
             @Query('category')category:string){
-        return this.post.findPostAll({skip:skip?skip:1,limit:limit?limit:10,category:category?category:'strull'})
+        return this.post.findPostAll({skip:skip?skip:1,limit:limit?limit:10,category:category?category:'ksnf'})
     }
     // listin에서 게시글 상세 보기
     @Get(':id')

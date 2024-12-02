@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity()
 export class Post{ //Post 테이블
     @PrimaryGeneratedColumn()
-    id:string;
+    id:number;
     @Column()
     title:string;
     @Column()
