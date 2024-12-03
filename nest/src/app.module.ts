@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CommentsModule } from './comments/comments.module';
 import { S3Module } from './s3/s3.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
+import { Comment } from './comments/entities/comment.entity';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User],
+        entities:[User, Comment],
         synchronize:true
       })
     }),

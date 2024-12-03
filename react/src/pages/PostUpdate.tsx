@@ -72,7 +72,7 @@ const PostUpdate: React.FC = () => {
     // 작성자가 글을 수정할때 해당글의 정보를 받아오는 함수
     const fetchPost = async () => {
       try {
-        const res = await Axios.get(`http://localhost:8000/api/posts/${id}`);
+        const res = await Axios.get(`http://localhost:3012/api/posts/${id}`);
         setUpTitle(res.data.data.title);
         setUpContent(res.data.data.content);
       } catch (error) {
@@ -95,7 +95,7 @@ const PostUpdate: React.FC = () => {
     // 유저가 로그인하면 string 비로그인이면 undefined이기 때문
     // 게시글 수정 요청 함수
     try {
-      const res = await Axios.put(`http://localhost:8000/api/posts/${id}`, {
+      const res = await Axios.put(`http://localhost:3012/api/posts/${id}`, {
         title: upTitle,
         content: upContent,
         category: boardName,

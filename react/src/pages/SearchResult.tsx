@@ -30,7 +30,7 @@ const SearchResult = () => {
 
   const fetchResult = async (page:number) => {
     const { data } = await axios.get(
-      `http://localhost:8000/api/search?content=${searchInput}&target=${target}&limit=${postPerPage}&page=${page}`
+      `http://localhost:3012/api/search?content=${searchInput}&target=${target}&limit=${postPerPage}&page=${page}`
     );
     setResultData(data.data);
     setTotalPage(data.totalPage);
