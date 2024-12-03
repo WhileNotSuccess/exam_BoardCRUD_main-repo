@@ -12,6 +12,10 @@ import { CommentsModule } from './comments/comments.module';
 import { S3Module } from './s3/s3.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { Comment } from './comments/entities/comment.entity';
+import { PostModule } from './post/post.module';
+import { CategoryModule } from './category/category.module';
+import { Category } from './category/entities/category.entity';
+import { Post } from './post/entities/post.entity';
 
 @Module({
   imports: [
@@ -26,14 +30,14 @@ import { Comment } from './comments/entities/comment.entity';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User, Comment],
+        entities:[User, Comment,Category,Post],
         synchronize:true
       })
     }),
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule, CommentsModule,S3Module],
+  AuthModule, UserModule, CommentsModule,S3Module, PostModule, CategoryModule],
   controllers: [AppController],
   providers: [AppService],
 })

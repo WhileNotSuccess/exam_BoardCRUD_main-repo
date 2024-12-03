@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/maincomp.css"
 import { useNavigate } from "react-router-dom";
+import HTMLReactParser from "html-react-parser/lib/index";
 interface List {
   author:string;
   category:string;
@@ -17,7 +18,7 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
   const [user, setUser] = useState(""); // 작성자 이름 담을 변수
   const [display, setDisplay] = useState({ x: 0, y: 0 }); // 마우스 우클릭 한 위치를 담을 변수
   const navig = useNavigate();
-
+  const [category, setCategory] = useState('자유게시판')
   const rightClick = (e: React.MouseEvent<HTMLDivElement>, user:string) => {
     //마우스 우클릭함수
     e.preventDefault(); // 브라우저 기본 우클릭 막는 코드
@@ -44,9 +45,9 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
         const user = item.author;
         return (
           <div className="line-change" key={item.id} onClick={closeMenu}>
-            <span onClick={() => navig(`/list-in/${item.id}`)}>
+            {category === '자유게시판' ? <span onClick={() => navig(`/list-in/${item.id}`)}>
               [{item.category}] {item.title}
-            </span>
+            </span> : HTMLReactParser(item.content)}
             <span
               className="user-value"
               onContextMenu={(e:React.MouseEvent<HTMLDivElement>) => rightClick(e, item.author)}

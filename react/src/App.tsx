@@ -7,6 +7,7 @@ import ImageUpload from "./test/ImageUpload"
 import Nav from "./components/Nav"
 import UserPage from "./pages/UserPage"
 import SearchResult from "./pages/SearchResult"
+import ListIn from "./pages/Listin"
 function App() {
   return(
   <>
@@ -21,6 +22,7 @@ function App() {
       <Route path="/search-result" element={<SearchResult />}/>
       <Route path="/post" element={<Post />}/>
       <Route path="/image-test" element={<ImageUpload />}/>
+      <Route path="/post/:id" element={<ListIn />}/>
     </Routes>
     </BrowserRouter>
   </>
