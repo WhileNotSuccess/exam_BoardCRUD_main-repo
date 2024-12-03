@@ -13,10 +13,6 @@ export class PostService{
     ){}
     queryRunner=this.dataSource.createQueryRunner();
 
-    async check(){
-        return await this.queryRunner.manager.find(Post)
-    }
-
     async findPostById(id:number){
         try{
             return await this.queryRunner.manager.findAndCount(Post,{where:{id:id}})
@@ -25,12 +21,13 @@ export class PostService{
         }
     }
     async findPostAll(page:PaginationDTO){  //skip=1 limit=10 category=skiej
+        
         const [category,total]=await this.queryRunner.manager.findAndCount(Post,{
             skip:(page.page-1)*page.limit,
             take:page.limit,
             where:{category:page.category},
             order:{created_at:'DESC'}
-        })
+        }).catch()
         const totalPage=Math.ceil(total/page.limit)
         const currentPage=page.page
         const nextPage=totalPage-currentPage?`http://localhost:3000/posts?page=${currentPage+1}`:null

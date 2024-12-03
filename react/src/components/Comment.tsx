@@ -1,8 +1,8 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import { CommentData } from "../pages/Listin";
 import { Axios } from "../lib/axios";
-import B from "../img/arrow_down.png";
-import C from "../img/arrow_up.png";
+import B from "../../public/images/arrow_down.png";
+import C from "../../public/images/arrow_up.png";
 import NComment from "./NComment";
 
 interface CommentProps {
@@ -39,7 +39,7 @@ const Comment: React.FC<CommentProps> = ({
     async function binary() {
       try {
         const raw_data = await Axios.get(
-          `http://localhost:8000/api/nested-comments?comment-id=${data.id}`
+          `http://localhost:3012/nested-comments?comment-id=${data.id}`
         );
         sDatad(raw_data.data.data);
       } catch (error) {
@@ -61,19 +61,19 @@ const Comment: React.FC<CommentProps> = ({
     }
   };
   const deleter = async () => {
-    await Axios.delete(`http://localhost:8000/api/comments/${data.id}`).catch(
+    await Axios.delete(`http://localhost:3012/comments/${data.id}`).catch(
       (e) => console.log(e)
     );
     urRender(!urender);
   };
   const remake = async () => {
-    await Axios.put(`http://localhost:8000/api/comments/${data.id}`, {
+    await Axios.put(`http://localhost:3012/comments/${data.id}`, {
       content: content,
     }).catch((e) => console.log(e));
     nAppear(false);
   };
   const nComment = async () => {
-    await Axios.post(`http://localhost:8000/api/nested-comments`, {
+    await Axios.post(`http://localhost:3012/api/nested-comments`, {
       commentId: `${data.id}`,
       content: content,
     }).catch((e) => console.log(e));

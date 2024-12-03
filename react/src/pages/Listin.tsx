@@ -37,7 +37,7 @@ const ListIn = () => {
   const [conid, sConid] = useState<number>(0); // 댓글 아이디
   const [loading, setLoading] = useState<boolean>(true); // 로딩중임을 나타내는 state --시작시 true로 loading 중, useEffect안에서 false로 변경하면 state 변경으로 렌더링
   const [error, setError] = useState<string>(""); // 에러임을 나타내는 state --시작시 공백(false)로 useEffect안에서 axios로 받아오는 중 error시 에러안에 글자열 저장(true)로 error표시
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User>(); //유저 장보 저장
   const { id } = useParams<{ id: string }>(); // 게시글 id
   const navi = useNavigate();
 
@@ -48,10 +48,10 @@ const ListIn = () => {
         const comment = await Axios.get(
           `http://localhost:3012/comments?post-id=${id}`
         );
-
         sPost(post.data.data);
         sListcon(post.data.data.content);
         sComment(comment.data.data);
+
         setLoading(false);
       } catch (err) {
         setError("error");
@@ -60,11 +60,13 @@ const ListIn = () => {
       }
     }
     async function getUser() {
-      const user = await Axios.get("/user/info");
+      // const user = await Axios.get("/user/info");
+      const user={data:{id:1,name:'string',profilePicture:"",googleId:3}}
       setUser(user.data);
     }
     fetchData();
     getUser();
+    console.log(post)
   }, [urender, id]);
 
   const confirm = (e: FormEvent) => {

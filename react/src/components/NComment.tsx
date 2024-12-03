@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Axios } from "../lib/axios";
-import A from "../img/enter2.png";
+import A from "../../public/images/enter2.png";
 import { NestedComment } from "./Comment";
 
 interface NestedProps {
@@ -25,13 +25,13 @@ const NComment: React.FC<NestedProps> = ({
 
   const deleter = async () => {
     await Axios.delete(
-      `http://localhost:8000/api/nested-comments/${nestComment?.id}`
+      `http://localhost:3012/nested-comments/${nestComment?.id}`
     ).catch((e) => console.log(e));
     sRender(!render);
   };
   const remake = async () => {
     await Axios.put(
-      `http://localhost:8000/api/nested-comments/${nestComment?.id}`,
+      `http://localhost:3012/nested-comments/${nestComment?.id}`,
       {
         content: content,
       }

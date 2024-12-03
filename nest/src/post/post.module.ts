@@ -19,7 +19,7 @@ import { UserModule } from "src/user/user.module";
         //     })
         // }
         PostService],
-    imports:[TypeOrmModule.forFeature([Post]),UserModule],
+    imports:[UserModule],
     controllers:[PostController],
     
 })
