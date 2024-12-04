@@ -32,6 +32,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     if(!user){
         throw new InternalServerErrorException('유저 데이터베이스 관련 오류')
     }
-    done(null, user);
+    done(null, user);  // 이 문장이 실행되애 request.user를 할수 있음
   }
 }

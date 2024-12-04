@@ -6,17 +6,17 @@ export class Comment {
   id : number
 
   @Column()
-  post_id : number
-
-  // @Column()
-  // author : string
+  postId : number
+  
+  @Column()
+  author : string
 
   @Column()
   content : string
 
-  // @CreateDateColumn()
-  // createAt : string
+  @CreateDateColumn()
+  createAt : string
 
-  // @UpdateDateColumn()
-  // updateAt : string
+  @UpdateDateColumn()
+  updateAt : string
 }

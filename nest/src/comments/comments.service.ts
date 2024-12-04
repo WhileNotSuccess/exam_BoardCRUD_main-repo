@@ -3,47 +3,76 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './entities/comment.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
+//트랜잭션은 수정 삭제 추가에서 사용 단순히 GET에서는 할필요 없음
 @Injectable()
 export class CommentsService {
-  constructor(@InjectRepository(Comment) private readonly commentRepository : Repository<Comment>){}
+  constructor(private readonly dataSource : DataSource){}
+  queryRunner = this.dataSource.createQueryRunner()
 
-  async create(createCommentDto: CreateCommentDto) {
-    const newComment = this.commentRepository.create(createCommentDto)
-    await this.commentRepository.save(newComment);
+  async create(createCommentDto: CreateCommentDto, req:string) {
+    await this.queryRunner.connect()
+    await this.queryRunner.startTransaction()
+    try{
+      const queryRunnerA =  this.queryRunner.manager.create(Comment,createCommentDto) // Comment엔티티의 열 모두 가져옴
+      queryRunnerA.author = req //이때의 author는 원래 null이었음
+      await this.queryRunner.manager.save(queryRunnerA)
+      await this.queryRunner.commitTransaction()
+    }catch(e){
+      console.log(e)
+      await this.queryRunner.rollbackTransaction()
+      
+    }
+    finally{
+      await this.queryRunner.release()
+    }
     return{
-      message : "성공했어요"
+      message : "추가 성공했어요"
     }
   }
 
-  async findAll(post_id:number) {
-    const comment = await this.commentRepository.findBy({post_id : post_id})
-    return  comment
-  }
-
-  async findOne(id: number) {
-    const comment = await this.commentRepository.findOneBy({id : id})  
+  async findAll(postId:number) {
     return {
-      data : comment
+      data: await this.dataSource.manager.findBy(Comment,{postId:postId})
     }
   }
+
 
   async update(id: number, updateCommentDto: UpdateCommentDto) {
-    const a = await this.commentRepository.findOne({where:{id}})
-    if (a){
-      try{
-        await this.commentRepository.update(id,updateCommentDto)
-      }
-      catch(e){
-        throw new BadGatewayException()
-      }
+    await this.queryRunner.connect()
+    await this.queryRunner.startTransaction()
+    try{
+      await this.queryRunner.manager.update(Comment,id,updateCommentDto)
+      await this.queryRunner.commitTransaction()
+      return {
+        data : updateCommentDto
+      } 
+    }catch(e){
+      await this.queryRunner.rollbackTransaction()
     }
-    return updateCommentDto
+    finally{
+      await this.queryRunner.release()
+    }
   }
 
   async remove(id: number) {
-    // const deleteComment = await this.commentRepository.findOne()
-    return `This action removes a ${id} comment`;
+    await this.queryRunner.connect()
+    await this.queryRunner.startTransaction()
+    try{
+      await this.queryRunner.manager.delete(Comment,id)
+      await this.queryRunner.commitTransaction()
+      return {
+        message : "삭제 성공했습니다"
+      }
+    }catch(e){
+      await this.queryRunner.rollbackTransaction()
+      return {
+        message : "삭제 실패하였습니다"
+      }
+    }
+    finally{
+      await this.queryRunner.release()
+    }
   }
 }

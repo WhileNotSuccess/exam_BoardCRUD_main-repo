@@ -12,6 +12,8 @@ import { CommentsModule } from './comments/comments.module';
 import { S3Module } from './s3/s3.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
 import { Comment } from './comments/entities/comment.entity';
+import { NestedCommentModule } from './nested-comment/nested-comment.module';
+import { NestedComment } from './nested-comment/entities/nested-comment.entity';
 
 @Module({
   imports: [
@@ -26,14 +28,14 @@ import { Comment } from './comments/entities/comment.entity';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User, Comment],
+        entities:[User, Comment, NestedComment],
         synchronize:true
       })
     }),
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule, CommentsModule,S3Module],
+  AuthModule, UserModule, CommentsModule,S3Module, NestedCommentModule],
   controllers: [AppController],
   providers: [AppService],
 })
