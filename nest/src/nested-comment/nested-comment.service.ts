@@ -8,31 +8,31 @@ import { DataSource } from 'typeorm';
 export class NestedCommentService {
   constructor(private readonly dataSource : DataSource){}
   
-  queryRunner = this.dataSource.createQueryRunner()
+
   
   async create(createNestedCommentDto: CreateNestedCommentDto) {
-    
-    await this.queryRunner.connect()
-    await this.queryRunner.startTransaction()
+    const queryRunner = this.dataSource.createQueryRunner()
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
     
     try {
-      const a = this.queryRunner.manager.create(NestedComment,createNestedCommentDto)
+      const a = queryRunner.manager.create(NestedComment,createNestedCommentDto)
       a.author = "진모"
-      await this.queryRunner.manager.save(a)
-      await this.queryRunner.commitTransaction()
+      await queryRunner.manager.save(a)
+      await queryRunner.commitTransaction()
 
     }catch(e){
-      await this.queryRunner.rollbackTransaction()
+      await queryRunner.rollbackTransaction()
     
     }finally{
-      await this.queryRunner.release()
+      await queryRunner.release()
     
     }
     return {message:"성공입니다"}
   }
 
   async findAll(commentId: number) {
-    return await this.dataSource.manager.findBy(NestedComment,{id:commentId});
+    return await this.dataSource.manager.findBy(NestedComment,{commentId:commentId});
   }
 
   async findOne(id: number) {
@@ -43,7 +43,9 @@ export class NestedCommentService {
     return `This action updates a #${id} nestedComment`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} nestedComment`;
+  async LHsremove(id: number[]) { // 배열을 받고 조건은 id in 배열
+
+    const real = await this.dataSource.createQueryBuilder().from(NestedComment, "nestedComment").delete().whereInIds(id).execute()
+    
   }
 }

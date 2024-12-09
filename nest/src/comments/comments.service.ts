@@ -4,11 +4,13 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './entities/comment.entity';
 import { DataSource, Repository } from 'typeorm';
+import { NestedCommentService } from 'src/nested-comment/nested-comment.service';
+import { NestedComment } from 'src/nested-comment/entities/nested-comment.entity';
 
 //트랜잭션은 수정 삭제 추가에서 사용 단순히 GET에서는 할필요 없음
 @Injectable()
 export class CommentsService {
-  constructor(private readonly dataSource : DataSource){}
+  constructor(private readonly dataSource : DataSource, private readonly nestedCommentService : NestedCommentService){}
   queryRunner = this.dataSource.createQueryRunner()
 
   async create(createCommentDto: CreateCommentDto, req:string) {
@@ -57,11 +59,15 @@ export class CommentsService {
   }
 
   async remove(id: number) {
+    const a = await this.dataSource.manager.findBy(NestedComment,{commentId:id})
     await this.queryRunner.connect()
     await this.queryRunner.startTransaction()
     try{
+      console.log(a)
+      await this.nestedCommentService.LHsremove(a.map((item)=>item.id))
       await this.queryRunner.manager.delete(Comment,id)
       await this.queryRunner.commitTransaction()
+
       return {
         message : "삭제 성공했습니다"
       }

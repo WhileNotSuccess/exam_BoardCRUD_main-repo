@@ -4,6 +4,7 @@ import { NestedCommentController } from './nested-comment.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NestedComment } from './entities/nested-comment.entity';
 @Module({
+  exports: [NestedCommentService],
   controllers: [NestedCommentController],
   providers: [NestedCommentService],
 })

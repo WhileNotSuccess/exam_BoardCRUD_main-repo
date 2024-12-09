@@ -2,11 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } f
 import { NestedCommentService } from './nested-comment.service';
 import { CreateNestedCommentDto } from './dto/create-nested-comment.dto';
 import { UpdateNestedCommentDto } from './dto/update-nested-comment.dto';
+import { DataSource } from 'typeorm';
 
 @Controller('nested_comment')
 export class NestedCommentController {
-  constructor(private readonly nestedCommentService: NestedCommentService) {}
-  
+  constructor(private readonly nestedCommentService: NestedCommentService, private readonly datasource : DataSource) {}
+
   // @UseGuards(AuthGuard('jwt'))
   @Post()
   async create(@Body() createNestedCommentDto: CreateNestedCommentDto) {
@@ -14,7 +15,7 @@ export class NestedCommentController {
   }
 
   @Get()
-  getAll(@Query('comment-id') commentId : number) {
+  getAll(@Query('comment_id') commentId : number) {
     return this.nestedCommentService.findAll(commentId);
   }
 
@@ -29,7 +30,7 @@ export class NestedCommentController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.nestedCommentService.remove(+id);
+  async remove(@Param('id') id: string) {
+   // return await this.datasource.createQueryBuilder().select('Comment.id').from(Comment,'Comment').where(`postId=${id}`).getMany()
   }
 }
