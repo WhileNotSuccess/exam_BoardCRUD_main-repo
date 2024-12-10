@@ -6,8 +6,6 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
 import { CommentsModule } from './comments/comments.module';
 import { S3Module } from './s3/s3.module';
 import { MemoryStoredFile, NestjsFormDataModule } from 'nestjs-form-data';
@@ -22,7 +20,6 @@ import { NestedComment } from './nested-comment/entities/nested-comment.entity';
 @Module({
   imports: [
     NestjsFormDataModule.config({storage:MemoryStoredFile}),
-    
     TypeOrmModule.forRootAsync({
       inject:[ConfigService],
       useFactory:(config:ConfigService)=>({
@@ -40,7 +37,6 @@ import { NestedComment } from './nested-comment/entities/nested-comment.entity';
     isGlobal: true,
   }), 
   AuthModule, UserModule, CommentsModule,S3Module, PostModule, CategoryModule,NestedCommentModule],
-  
   controllers: [AppController],
   providers: [AppService],
 })
