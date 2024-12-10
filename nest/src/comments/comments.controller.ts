@@ -23,12 +23,12 @@ export class CommentsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':comment')  // :는 숫자로 받아오겠다
-  update(@Param('comment') id: number, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(id, updateCommentDto);
+  update(@Param('comment') id: number, @Body() updateCommentDto: UpdateCommentDto, @Req()req : any) {
+    return this.commentsService.update(id, updateCommentDto, req.user.name);
   }
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.commentsService.remove(id);
+  remove(@Param('id') id: number, @Req()req : any) {
+    return this.commentsService.remove(id, req.user.name);
   }
 }
