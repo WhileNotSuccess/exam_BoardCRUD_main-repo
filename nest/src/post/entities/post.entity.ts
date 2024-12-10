@@ -1,5 +1,5 @@
-import { Category } from "src/category/entities/category.entity";
-import { Comment } from "src/comments/entities/comment.entity";
+import { Category } from "../../category/entities/category.entity";
+import { Comment } from "../../comments/entities/comment.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 

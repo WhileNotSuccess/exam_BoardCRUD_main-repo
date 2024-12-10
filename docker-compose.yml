@@ -23,6 +23,7 @@ services:
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASS}
       - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_PORT=${DB_PORT}
       - TZ=${TZ}
       - CHOKIDAR_USEPOLLING=true
     tty: true
