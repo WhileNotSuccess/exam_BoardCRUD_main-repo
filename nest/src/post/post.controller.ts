@@ -3,7 +3,7 @@ import { PostService } from "./post.service";
 import { postDTO } from "./dto/post.dto";
 import { PaginationDTO } from "./dto/pagination.dto";
 import { AuthGuard } from "@nestjs/passport";
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiProperty, ApiPropertyOptional, ApiQuery, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiQuery, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { http } from "winston";
 import { SearchDTO } from "./dto/search.dto";
 
