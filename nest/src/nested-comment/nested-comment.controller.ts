@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req } from '@nestjs/common';
 import { NestedCommentService } from './nested-comment.service';
 import { CreateNestedCommentDto } from './dto/create-nested-comment.dto';
 import { UpdateNestedCommentDto } from './dto/update-nested-comment.dto';
@@ -11,8 +11,8 @@ export class NestedCommentController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  async create(@Body() createNestedCommentDto: CreateNestedCommentDto) {
-    return  await this.nestedCommentService.create(createNestedCommentDto);
+  async create(@Body() createNestedCommentDto: CreateNestedCommentDto, @Req() req: any) {
+    return  await this.nestedCommentService.create(createNestedCommentDto,req.user.name);
   }
 
   @Get()
@@ -21,18 +21,18 @@ export class NestedCommentController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.nestedCommentService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.nestedCommentService.findOne(id);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateNestedCommentDto: UpdateNestedCommentDto) {
-    return this.nestedCommentService.update(+id, updateNestedCommentDto);
+  update(@Param('id') id: number, @Body() updateNestedCommentDto: UpdateNestedCommentDto) {
+    return this.nestedCommentService.update(id, updateNestedCommentDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-   // return await this.datasource.createQueryBuilder().select('Comment.id').from(Comment,'Comment').where(`postId=${id}`).getMany()
+  async remove(@Param('id') id: number) {
+    return this.nestedCommentService.remove(id);
   }
 }
