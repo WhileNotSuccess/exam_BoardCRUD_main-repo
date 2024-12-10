@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateNestedCommentDto } from './dto/create-nested-comment.dto';
 import { UpdateNestedCommentDto } from './dto/update-nested-comment.dto';
 import { NestedComment } from './entities/nested-comment.entity';
@@ -23,9 +23,9 @@ export class NestedCommentService {
       await queryRunner.commitTransaction();
       return { message: '대댓글 추가를 성공했습니다' };
     } catch (e) {
-      console.error('대댓글 추가 에러 :', e);
+      
       await queryRunner.rollbackTransaction();
-      throw e;
+      throw new BadRequestException(`${e.sqlMessage}`)
     } finally {
       await queryRunner.release();
     }
@@ -53,9 +53,9 @@ export class NestedCommentService {
       await queryRunner.commitTransaction();
       return { message: '수정을 성공했습니다.' };
     } catch (e) {
-      console.error('수정 실패 :', e);
+
       await queryRunner.rollbackTransaction();
-      throw e;
+      throw new BadRequestException(`${e.sqlMessage}`)
     } finally {
       await queryRunner.release();
     }
@@ -73,9 +73,9 @@ export class NestedCommentService {
       await queryRunner.commitTransaction();
       return { message: '삭제를 성공했습니다.' };
     } catch (e) {
-      console.error('삭제 실패 :', e);
+
       await queryRunner.rollbackTransaction();
-      throw e;
+      throw new BadRequestException(`${e.sqlMessage}`)
     } finally {
       await queryRunner.release();
     }

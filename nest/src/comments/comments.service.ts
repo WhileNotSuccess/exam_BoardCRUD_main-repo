@@ -1,4 +1,4 @@
-import { BadGatewayException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -27,9 +27,9 @@ export class CommentsService {
         message : "추가 성공했어요"
       }
     }catch(e){
-      console.log(e)
-      await queryRunner.rollbackTransaction()
       
+      await queryRunner.rollbackTransaction()
+      throw new BadRequestException(`${e.sqlMessage}`)
     }
     finally{
       await queryRunner.release()
@@ -61,6 +61,7 @@ export class CommentsService {
       } 
     }catch(e){
       await queryRunner.rollbackTransaction()
+      throw new BadRequestException(`${e.sqlMessage}`)
     }
     finally{
       await queryRunner.release()
@@ -77,7 +78,7 @@ export class CommentsService {
     await queryRunner.connect()
     await queryRunner.startTransaction()
     try{
-      console.log(a)
+
       await this.nestedCommentService.LHsremove(a.map((item)=>item.id))
       await queryRunner.manager.delete(Comment,id)
       await queryRunner.commitTransaction()
@@ -87,9 +88,7 @@ export class CommentsService {
       }
     }catch(e){
       await queryRunner.rollbackTransaction()
-      return {
-        message : "삭제 실패하였습니다"
-      }
+      throw new BadRequestException(`${e.sqlMessage}`)
     }
     finally{
       await queryRunner.release()

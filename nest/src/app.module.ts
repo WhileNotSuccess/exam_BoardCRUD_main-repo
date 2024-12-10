@@ -16,6 +16,10 @@ import { Category } from './category/entities/category.entity';
 import { Post } from './post/entities/post.entity';
 import { NestedCommentModule } from './nested-comment/nested-comment.module';
 import { NestedComment } from './nested-comment/entities/nested-comment.entity';
+import * as winston from 'winston'
+import { WinstonModule } from 'nest-winston';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './common/http-exception.filter';
 
 @Module({
   imports: [
@@ -33,11 +37,40 @@ import { NestedComment } from './nested-comment/entities/nested-comment.entity';
         synchronize:true
       })
     }),
+    WinstonModule.forRoot({
+
+      transports:[
+        new winston.transports.Console({
+          level: 'silly' ,
+          format: winston.format.combine(
+            winston.format.colorize(),
+            winston.format.timestamp(),
+            winston.format.printf(({ timestamp, level, message })=>{
+              return `${timestamp} [${level}]: ${message}`;
+            })
+          )
+        }),
+        new winston.transports.File({
+          filename: 'exam_BoardCRUD.log',
+          level: 'warn',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.printf(({ timestamp, level, message }) => {
+              return `${timestamp} [${level}]: ${message}`;
+          })
+        )
+        })
+      ]
+
+    }),
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
   AuthModule, UserModule, CommentsModule,S3Module, PostModule, CategoryModule,NestedCommentModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,{
+    provide: APP_FILTER,
+    useClass: HttpExceptionFilter
+  }],
 })
 export class AppModule {}
