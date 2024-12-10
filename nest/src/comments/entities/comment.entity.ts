@@ -1,5 +1,5 @@
-import { NestedComment } from "src/nested-comment/entities/nested-comment.entity";
-import { Post } from "src/post/entities/post.entity";
+import { NestedComment } from '../../nested-comment/entities/nested-comment.entity';
+import { Post } from "../../post/entities/post.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()

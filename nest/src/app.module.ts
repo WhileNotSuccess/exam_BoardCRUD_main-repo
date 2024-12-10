@@ -34,7 +34,7 @@ import { HttpExceptionFilter } from './common/http-exception.filter';
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
         entities:[User, Comment,Category,Post, NestedComment],
-        synchronize:true
+        synchronize:false
       })
     }),
     WinstonModule.forRoot({
