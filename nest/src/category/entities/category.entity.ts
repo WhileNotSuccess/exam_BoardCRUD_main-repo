@@ -3,11 +3,13 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeo
 
 @Entity()
 @Unique(['name'])
-export class Category{
+export class Category {
     @PrimaryGeneratedColumn()
-    id:number;
-    
+    id: number;
+
     @Column()
-    @OneToMany(()=>Post,post=>post.category)
-    name:string;
+    name: string;
+
+    @OneToMany(() => Post, post => post.category)
+    posts: Post[];
 }

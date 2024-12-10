@@ -3,12 +3,13 @@ import { NestedCommentService } from './nested-comment.service';
 import { CreateNestedCommentDto } from './dto/create-nested-comment.dto';
 import { UpdateNestedCommentDto } from './dto/update-nested-comment.dto';
 import { DataSource } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('nested_comment')
 export class NestedCommentController {
   constructor(private readonly nestedCommentService: NestedCommentService, private readonly datasource : DataSource) {}
 
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   async create(@Body() createNestedCommentDto: CreateNestedCommentDto) {
     return  await this.nestedCommentService.create(createNestedCommentDto);
@@ -24,6 +25,7 @@ export class NestedCommentController {
     return this.nestedCommentService.findOne(+id);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateNestedCommentDto: UpdateNestedCommentDto) {
     return this.nestedCommentService.update(+id, updateNestedCommentDto);

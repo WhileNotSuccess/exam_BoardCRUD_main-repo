@@ -4,41 +4,43 @@ import { CategoryDTO } from "./dto/category.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
-
-
 @Controller('category')
-export class CategoryController{
+export class CategoryController {
     constructor(
-        private readonly service:CategoryService
-    ){}
+        private readonly service: CategoryService
+    ) {}
+
     @Get()
-    @ApiOperation({summary:'category열 요청'})
-    @ApiOkResponse({description:'complete get category'})
-    async getCategory(){
-        return await this.service.getCategory()
+    @ApiOperation({ summary: 'Request all categories' })
+    @ApiOkResponse({ description: 'Successfully retrieved all categories' })
+    async getCategory() {
+        return await this.service.getCategory();
     }
-    @ApiOperation({summary:'category post'})
-    @ApiOkResponse({description:'complete post category'})
-    @ApiUnauthorizedResponse({description:'unauthorized'})
-    @UseGuards(AuthGuard('jwt'))
+
     @Post()
-    async postCategory(@Body()body:CategoryDTO){
-        return await this.service.postCategory(body)
-    }
-    @ApiOperation({summary:'category put'})
-    @ApiOkResponse({description:'complete post put'})
-    @ApiUnauthorizedResponse({description:'unauthorized'})
+    @ApiOperation({ summary: 'Create a new category' })
+    @ApiOkResponse({ description: 'Category created successfully' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized' })
     @UseGuards(AuthGuard('jwt'))
+    async postCategory(@Body() body: CategoryDTO) {
+        return await this.service.postCategory(body);
+    }
+
     @Put(':id')
-    async putCategory(@Param()id:number,@Body()body:CategoryDTO){
-        return await this.service.updateCategory(id,body)
-    }
-    @ApiOperation({summary:'category delete'})
-    @ApiOkResponse({description:'complete post delete'})
-    @ApiUnauthorizedResponse({description:'unauthorized'})
+    @ApiOperation({ summary: 'Update an existing category' })
+    @ApiOkResponse({ description: 'Category updated successfully' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized' })
     @UseGuards(AuthGuard('jwt'))
+    async putCategory(@Param('id') id: number, @Body() body: CategoryDTO) {
+        return await this.service.updateCategory(id, body);
+    }
+
     @Delete(':id')
-    async deleteCategory(@Param()id:number){
-        return await this.service.deleteCategory(id)
+    @ApiOperation({ summary: 'Delete an existing category' })
+    @ApiOkResponse({ description: 'Category deleted successfully' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+    @UseGuards(AuthGuard('jwt'))
+    async deleteCategory(@Param('id') id: number) {
+        return await this.service.deleteCategory(id);
     }
 }

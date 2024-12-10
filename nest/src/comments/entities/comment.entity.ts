@@ -1,9 +1,15 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { NestedComment } from "src/nested-comment/entities/nested-comment.entity";
+import { Post } from "src/post/entities/post.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
   id : number
+
+  @ManyToOne(() => Post, post => post.comments)
+  @JoinColumn({ name: 'postId' })
+  post: Post;
 
   @Column()
   postId : number
@@ -19,4 +25,7 @@ export class Comment {
 
   @UpdateDateColumn()
   updateAt : string
+
+  @OneToMany(() => NestedComment, nestedComment => nestedComment.comment)
+  nestedComments: NestedComment[];
 }

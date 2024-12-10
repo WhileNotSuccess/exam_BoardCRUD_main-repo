@@ -1,5 +1,6 @@
 import { Category } from "src/category/entities/category.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Comment } from "src/comments/entities/comment.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 @Entity()
@@ -19,4 +20,6 @@ export class Post{ //Post 테이블
     created_at:string;
     @UpdateDateColumn()
     updated_at:string;
+    @OneToMany(() => Comment, comment => comment.post)
+    comments: Comment[];
 }

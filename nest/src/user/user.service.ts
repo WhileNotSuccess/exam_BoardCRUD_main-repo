@@ -13,13 +13,13 @@ export class UserService {
     return this.dataSource.manager.findBy(User,{id:id})
   }
   async createNewUser(createUserDto: CreateUserDto) {
-    let user = null;
     const queryRunner = await this.dataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
     try{
-      user = await queryRunner.manager.save(User, createUserDto)
+      const user = await queryRunner.manager.save(User, createUserDto)
       await queryRunner.commitTransaction()
+      return user
     }catch(e){
       await queryRunner.rollbackTransaction()
       console.error(e)
@@ -28,7 +28,6 @@ export class UserService {
       await queryRunner.release()
     }
 
-    return user
   }
 
   async findOneByGoogleId(id:string){

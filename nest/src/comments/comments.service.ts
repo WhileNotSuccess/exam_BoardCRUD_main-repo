@@ -21,6 +21,9 @@ export class CommentsService {
       queryRunnerA.author = req //이때의 author는 원래 null이었음
       await this.queryRunner.manager.save(queryRunnerA)
       await this.queryRunner.commitTransaction()
+      return{
+        message : "추가 성공했어요"
+      }
     }catch(e){
       console.log(e)
       await this.queryRunner.rollbackTransaction()
@@ -29,9 +32,7 @@ export class CommentsService {
     finally{
       await this.queryRunner.release()
     }
-    return{
-      message : "추가 성공했어요"
-    }
+    
   }
 
   async findAll(postId:number) {
