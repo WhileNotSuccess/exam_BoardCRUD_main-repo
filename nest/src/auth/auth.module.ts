@@ -9,8 +9,8 @@ import { GoogleStrategy } from './google.strategy';
 import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  imports:[UserModule,
-    PassportModule.register({
+  imports:[UserModule,  // 사용자 정보를 관리하는 모듈
+    PassportModule.register({ 
     session:false
   }),
   JwtModule.registerAsync({

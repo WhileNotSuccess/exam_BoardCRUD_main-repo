@@ -23,6 +23,6 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   @Get('info')
   test(@Req() request){
-    return request.user
+    return request.user //passport가 있어야 함, auth.module에 import된 passportmodule이 있기때문에 가능함
   }
 }

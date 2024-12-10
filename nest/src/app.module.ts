@@ -16,6 +16,8 @@ import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
 import { Post } from './post/entities/post.entity';
+import { NestedCommentModule } from './nested-comment/nested-comment.module';
+import { NestedComment } from './nested-comment/entities/nested-comment.entity';
 
 @Module({
   imports: [
@@ -30,14 +32,15 @@ import { Post } from './post/entities/post.entity';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User, Comment,Category,Post],
+        entities:[User, Comment,Category,Post, NestedComment],
         synchronize:true
       })
     }),
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
-  AuthModule, UserModule, CommentsModule,S3Module, PostModule, CategoryModule],
+  AuthModule, UserModule, CommentsModule,S3Module, PostModule, CategoryModule,NestedCommentModule],
+  
   controllers: [AppController],
   providers: [AppService],
 })

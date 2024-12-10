@@ -17,7 +17,7 @@ export class AuthService {
     if(user) return user;
     return await this.userService.createNewUser({
       name:details.name,
-      profilePicture: details.profilePicture,
+      profilePicture: details.profilePicture, 
       googleId: details.googleId
     })
   }
