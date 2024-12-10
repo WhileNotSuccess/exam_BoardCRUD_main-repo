@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { BadGatewayException, BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Category } from "./entities/category.entity";
 import { DataSource, Repository } from "typeorm";
@@ -31,7 +31,7 @@ export class CategoryService{
                 return 'post success'
             } catch (e) {
                 await this.queryRunner.rollbackTransaction();
-                throw error(e)
+                throw new BadRequestException(`${e.sqlMessage}`)
             }finally{
                 await this.queryRunner.release()
             }
@@ -47,7 +47,7 @@ export class CategoryService{
             return 'delete success'
         }catch(e){
             await this.queryRunner.rollbackTransaction();
-            throw error(e)
+            throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
             await this.queryRunner.release();
         }
@@ -63,7 +63,7 @@ export class CategoryService{
             return 'put success' 
         } catch (e) {
             await this.queryRunner.rollbackTransaction();
-            throw error(e)
+            throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
             await this.queryRunner.release();
         }

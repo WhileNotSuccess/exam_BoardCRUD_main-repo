@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { postDTO } from "./dto/post.dto";
 import { DataSource } from "typeorm";
 import { Post } from "./entities/post.entity";
@@ -68,7 +68,7 @@ export class PostService{
             return 'finished delete'
         } catch (e) {
             await this.queryRunner.rollbackTransaction()
-            throw e
+            throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
             await this.queryRunner.release()
         }
@@ -86,7 +86,7 @@ export class PostService{
             return 'finished update'
         } catch (e) {
             await this.queryRunner.rollbackTransaction()
-            throw error(e)
+            throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
             await this.queryRunner.release()
         }
@@ -101,7 +101,7 @@ export class PostService{
             return 'finished upload'
         } catch (e) {
             await this.queryRunner.rollbackTransaction()
-            throw error(e)
+            throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
             await this.queryRunner.release()
         }
