@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Query, Put, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, Put, UseGuards, Req, Headers } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -19,6 +19,11 @@ export class CommentsController {
   @Get()
   async getAll(@Query('post-id') postId:number){
     return await this.commentsService.findAll(postId)
+  }
+
+  @Get('search')
+  async getUser(@Query('limit') limit:number,@Query('page') page:number, @Headers() header){
+    return this.commentsService.getUserComment(limit??10,page??1,header.nickName)
   }
 
   @UseGuards(AuthGuard('jwt'))

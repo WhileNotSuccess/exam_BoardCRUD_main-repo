@@ -55,7 +55,7 @@ export class PostService{
         };
     }
     
-    async findPostAll(page:PaginationDTO){  //skip=1 limit=10 category=skiej
+    async findPostAll(page:PaginationDTO){  //skip=1 limit=10 category=자유게시판
         
         const [search,total]=await this.dataSource.manager.findAndCount(Post,{
             skip:(page.page-1)*page.limit,

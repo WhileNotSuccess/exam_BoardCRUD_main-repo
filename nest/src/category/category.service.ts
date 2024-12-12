@@ -14,7 +14,7 @@ export class CategoryService{
     // 카테고리 이름 받기
     async getCategory(){
         const cate= await this.dataSource.manager.find(Category)
-        return cate;
+        return {data:cate};
     }
     //카테고리 신규 작성
     async postCategory(body:CategoryDTO,user:any){

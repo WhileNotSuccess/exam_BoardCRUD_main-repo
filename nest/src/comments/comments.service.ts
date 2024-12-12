@@ -93,4 +93,18 @@ export class CommentsService {
       await queryRunner.release()
     }
   }
+  async getUserComment(limit:number,page:number,author:string){
+    const [content,total]=await this.dataSource.manager.findAndCount(Comment,{
+      where:{author:author},
+      skip:(page-1)*limit,
+      take:limit,
+      order:{createAt:'DESC'}
+    })
+    const totalPage=Math.ceil(total/limit)
+    const currentPage=page
+    const nextPage=totalPage-currentPage?`http://localhost:3012/posts?page=${currentPage+1}`:null
+    const prevPage=currentPage-1?`http://localhost:3012/posts?page=${currentPage-1}`:null
+    
+    return content?{data:content,totalPage,currentPage,nextPage,prevPage}:null
+  }
 }
