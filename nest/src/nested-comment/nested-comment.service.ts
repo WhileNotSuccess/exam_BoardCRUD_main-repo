@@ -32,7 +32,7 @@ export class NestedCommentService {
   }
 
   async findAll(commentId: number) {
-    return await this.dataSource.manager.findBy(NestedComment, { commentId: commentId });
+    return await this.dataSource.manager.findBy(NestedComment, { commentId: commentId })
   }
 
   async findOne(id: number) {

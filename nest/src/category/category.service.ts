@@ -13,18 +13,18 @@ export class CategoryService{
     
     // 카테고리 이름 받기
     async getCategory(){
-        const queryRunner=this.dataSource.createQueryRunner();
-        const cate= await queryRunner.manager.find(Category)
+        const cate= await this.dataSource.manager.find(Category)
         return cate;
     }
     //카테고리 신규 작성
     async postCategory(body:CategoryDTO,user:any){
         
-        const queryRunner=this.dataSource.createQueryRunner();
-        const category= await queryRunner.manager.exists(Category,{where:{name:body.name}})
+        
+        const category= await this.dataSource.manager.exists(Category,{where:{name:body.name}})
         if(category){
             throw new ConflictException('already exists name')
         }else{
+            const queryRunner= this.dataSource.createQueryRunner();
             await queryRunner.connect();
             await queryRunner.startTransaction();
             try {
@@ -41,7 +41,7 @@ export class CategoryService{
     }
     //카테고리 삭제
     async deleteCategory(id:number){
-        const queryRunner=this.dataSource.createQueryRunner();
+        const queryRunner= this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try{
@@ -58,7 +58,7 @@ export class CategoryService{
     }
     //카테고리 이름 변경
     async updateCategory(id:number,body:CategoryDTO){
-        const queryRunner=this.dataSource.createQueryRunner();
+        const queryRunner= this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {

@@ -45,6 +45,7 @@ export class PostController {
     })
     @Get()
     findAll(@Query() query: PaginationDTO) {
+        
         return this.postService.findPostAll({
             page: query.page ?? 1,
             limit: query.limit ?? 10,
@@ -111,8 +112,8 @@ export class PostController {
             content: "string",
             author: "string",
             category: "string",
-            created_at: "date",
-            updated_at: "date",
+            createdAt: "date",
+            updatedAt: "date",
         }
     })
     @Get(':id')

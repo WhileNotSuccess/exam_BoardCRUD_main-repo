@@ -10,9 +10,9 @@ import "../css/PostComp.css";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
 import {Axios} from "../lib/axios";
-import { UserInfoCompo } from "../components/MainComp";
+import UserInfoCompo from '../components/UserInfoComp'
 import { useNavigate } from "react-router-dom";
-import { CategoryCompo } from "../components/CategoryCompo";
+import {CategoryCompo} from "../components/CategoryComp";
 
 // CKEditor에서 이미지 업로드를 처리하는 커스텀 업로드 어댑터
 class MyUploadAdapter {
@@ -72,7 +72,7 @@ const PostUpdate: React.FC = () => {
     // 작성자가 글을 수정할때 해당글의 정보를 받아오는 함수
     const fetchPost = async () => {
       try {
-        const res = await Axios.get(`http://localhost:3012/api/posts/${id}`);
+        const res = await Axios.get(`http://localhost:3012/posts/${id}`);
         setUpTitle(res.data.data.title);
         setUpContent(res.data.data.content);
       } catch (error) {
@@ -95,7 +95,7 @@ const PostUpdate: React.FC = () => {
     // 유저가 로그인하면 string 비로그인이면 undefined이기 때문
     // 게시글 수정 요청 함수
     try {
-      const res = await Axios.put(`http://localhost:3012/api/posts/${id}`, {
+      const res = await Axios.put(`http://localhost:3012/posts/${id}`, {
         title: upTitle,
         content: upContent,
         category: boardName,
@@ -159,7 +159,7 @@ const PostUpdate: React.FC = () => {
       </div>
 
       <div>
-        <UserInfoCompo user={user} />
+        {/* <UserInfoCompo user={user} /> */}
       </div>
     </div>
   );

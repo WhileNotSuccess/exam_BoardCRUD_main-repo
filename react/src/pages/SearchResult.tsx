@@ -18,7 +18,8 @@ interface targetState {
 const SearchResult = () => {
   const [postPerPage, setPostPerPage] = useState(10); // 한 페이지에 띄울 게시글 갯수
   const location = useLocation();
-  const { searchInput } = location.state || {searchInput: ""}; // 검색 내용을 location으로 값을 받아옴
+  const { searchInput } = location.state; // 검색 내용을 location으로 값을 받아옴
+  
   const target = useSelector((state:targetState) => state.target); // 리듀서를 이용해 이전 페이지의 타겟(제목,내용,작성자)을 받아옴
   const [resultData, setResultData] = useState([]); // 주소를 통해 받아온 response 데이터
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
@@ -30,7 +31,7 @@ const SearchResult = () => {
 
   const fetchResult = async (page:number) => {
     const { data } = await axios.get(
-      `http://localhost:3012/api/search?content=${searchInput}&target=${target}&limit=${postPerPage}&page=${page}`
+      `http://localhost:3012/posts/search?content=${searchInput}&target=${target}&limit=${postPerPage}&page=${page}`
     );
     setResultData(data.data);
     setTotalPage(data.totalPage);
@@ -84,7 +85,7 @@ const SearchResult = () => {
         <hr />
         {resultData.length > 0 ? <PostList list={resultData} /> : null}
       </div>
-      <UserInfoCompo user={user}/>
+      <UserInfoCompo/>
       <DownSearch />
       <div className="down-banner">
         <Pagination

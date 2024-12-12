@@ -13,7 +13,9 @@ const Nav = () => {
     setSearchInput(e.target.value);
   };
 
-  const inputExist = () => {
+  const inputExist = (e:React.FormEvent) => {
+    e.preventDefault()
+    
     if (searchInput === "") {
       alert("내용을 입력해주세요.");
     } else {
@@ -24,25 +26,20 @@ const Nav = () => {
     }
   };
 
-  const handleKeyPress = (e:React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      inputExist();
-    }
-  };
+
 
   return (
     <div className="parent">
       <div className="header">
         <Link to="/" className="logo"></Link>
         <div className="rectangle">
-          <form onSubmit={inputExist} className="search-form">
+          <form onSubmit={(e)=>{inputExist(e)}} className="search-form">
             <input
               className="search-box"
               placeholder="내용을 입력하세요."
               value={searchInput}
               onChange={onChange}
-              onKeyUp={handleKeyPress}
+              
             />
             <button type="submit" className="search-icon">
               <img src="/images/search.jpg" alt="Search" />

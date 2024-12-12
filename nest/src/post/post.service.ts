@@ -5,6 +5,7 @@ import { Post } from "./entities/post.entity";
 import { PaginationDTO } from "./dto/pagination.dto";
 import { error } from "console";
 import { SearchDTO } from "./dto/search.dto";
+import { Category } from "src/category/entities/category.entity";
 
 
 @Injectable()
@@ -14,40 +15,52 @@ export class PostService{
     ){}
     
     async findPostById(id:number){
-        const queryRunner=this.dataSource.createQueryRunner();
-        const returnValue=await queryRunner.manager.find(Post,{where:{id:id}})
+        
+        const returnValue=await this.dataSource.manager.findOne(Post,{where:{id:id}})
         return {data:returnValue}
     }
   
-    async findPostSearch(body:SearchDTO){
-        const findArray:string[]=body.content.split('-').filter(value=>value!=='') 
-        //sql injection의 공통점:뒤의 조건식을 --로 주석 처리=>query로 받으며, 띄어쓰기를 - 기준으로 구분함으로 --를 무력화
-            .map(element=>`%${element}%`)
-        const [search,total]=await this.dataSource.createQueryBuilder().select('post').from(Post,'post')
-        .where('('+findArray.map((element)=>`${body.target} LIKE '${element}'`).join(' OR ')+')') // => where (__LIKE__ OR __LIKE___)
-        .andWhere(`category='${body.category}'`)
-        .setFindOptions({
-            skip:(body.page-1)*body.limit,  //건너뛸 개수
-            take:body.limit,                //불러올 개수
-            order:{created_at:'DESC'} })    //정렬할 조건
-        .getManyAndCount()
-        // .getSql()
-        const totalPage=Math.ceil(total/body.limit) 
-        const currentPage=body.page
-        const nextPage=totalPage-currentPage?`http://localhost:3012/posts?search=${currentPage+1}`:null
-        const prevPage=currentPage-1?`http://localhost:3012/posts?search=${currentPage-1}`:null
-
-        return {data:search,totalPage,currentPage,nextPage,prevPage}
-        // return search
+    async findPostSearch(body: SearchDTO) {
+    
+        const findArray: string[] = body.content.split(' ').filter(value => value !== '') 
+            .map(element => `%${element}%`);
+        
+        const queryBuilder = this.dataSource.createQueryBuilder().select('post').from(Post, 'post');
+    
+        findArray.forEach((element, index) => {
+            queryBuilder.orWhere(`${body.target} LIKE :element${index}`, { [`element${index}`]: element });
+        });
+    
+        queryBuilder.andWhere('category LIKE :category', { category: body.category })
+            .skip((body.page - 1) * body.limit)
+            .take(body.limit)
+            .orderBy('createdAt', 'DESC');
+    
+        const [search, total] = await queryBuilder.getManyAndCount();
+        
+        const totalPage = Math.ceil(total / body.limit);
+        const currentPage = body.page;
+        const nextPage = currentPage < totalPage ? `http://localhost:3012/posts/search?category=${body.category}&content=${body.content}&limit=${body.limit}&target=${body.target}&page=${currentPage + 1}` : null;
+        const prevPage = currentPage > 1 ? `http://localhost:3012/posts/search?category=${body.category}&content=${body.content}&limit=${body.limit}&target=${body.target}&page=${currentPage - 1}` : null;
+    
+        return {
+            data: search,
+            totalPage,
+            currentPage,
+            nextPage,
+            prevPage
+        };
     }
+    
     async findPostAll(page:PaginationDTO){  //skip=1 limit=10 category=skiej
-        const queryRunner=this.dataSource.createQueryRunner();
-        const [search,total]=await queryRunner.manager.findAndCount(Post,{
+        
+        const [search,total]=await this.dataSource.manager.findAndCount(Post,{
             skip:(page.page-1)*page.limit,
             take:page.limit,
             where:{category:page.category},
-            order:{created_at:'DESC'}
-        }).catch()
+            order:{createdAt:'DESC'}
+        })
+
         const totalPage=Math.ceil(total/page.limit)
         const currentPage=page.page
         const nextPage=totalPage-currentPage?`http://localhost:3012/posts?page=${currentPage+1}`:null
@@ -56,11 +69,12 @@ export class PostService{
         return search?{data:search,totalPage,currentPage,nextPage,prevPage}:null
     }
     async deletePost(id:number,user:string){
-        const queryRunner=this.dataSource.createQueryRunner();
-        const post= await queryRunner.manager.findOneBy(Post,{id:id})
+        
+        const post= await this.dataSource.manager.findOneBy(Post,{id:id})
         if(user!=post.author){
             throw new ForbiddenException()
         }
+        const queryRunner=this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
@@ -75,11 +89,12 @@ export class PostService{
         }
     }
     async updatePost(id:number,body:postDTO,user:string){
-        const queryRunner=this.dataSource.createQueryRunner();
-        const post=await queryRunner.manager.findOneBy(Post,{id:id})
+        
+        const post=await this.dataSource.manager.findOneBy(Post,{id:id})
         if(user!=post.author){
             throw new ForbiddenException()
         }
+        const queryRunner=this.dataSource.createQueryRunner();
         await queryRunner.connect()
         await queryRunner.startTransaction()
         try {

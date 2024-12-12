@@ -17,7 +17,7 @@ export class CommentsController {
   }
 
   @Get()
-  async getAll(@Query('post_id') postId:number){
+  async getAll(@Query('post-id') postId:number){
     return await this.commentsService.findAll(postId)
   }
 

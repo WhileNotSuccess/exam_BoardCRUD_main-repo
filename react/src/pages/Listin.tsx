@@ -13,7 +13,7 @@ interface Post {
   content: string;
   author: string;
   category: string;
-  updated_at: string;
+  updatedAt: string;
 }
 interface User {
   id: number;
@@ -51,7 +51,6 @@ const ListIn = () => {
         sPost(post.data.data);
         sListcon(post.data.data.content);
         sComment(comment.data.data);
-
         setLoading(false);
       } catch (err) {
         setError("error");
@@ -66,7 +65,7 @@ const ListIn = () => {
     }
     fetchData();
     getUser();
-    console.log(post)
+    
   }, [urender, id]);
 
   const confirm = (e: FormEvent) => {
@@ -83,7 +82,11 @@ const ListIn = () => {
     await Axios.post(`http://localhost:3012/comments`, {
       postId: `${id}`,
       content: content,
+    },
+    {
+      headers:{'Content-type':'application/json'}
     }).catch((e: unknown) => console.log(e));
+    urRender(!urender);
   };
   //post-update페이지로 navigate
   const updater = () => {
@@ -119,7 +122,7 @@ const ListIn = () => {
           ) : null}
           <div id="line">
             <h3>내용</h3>
-            <div>{HTMLReactParser(listcon)}</div>
+            {post?.content? <div>{HTMLReactParser(post?.content)}</div>:<></>}
           </div>
           {/*댓글 달기 위한 form element*/}
           <div id="form">

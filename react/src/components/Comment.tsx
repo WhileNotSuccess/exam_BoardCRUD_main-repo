@@ -42,6 +42,7 @@ const Comment: React.FC<CommentProps> = ({
           `http://localhost:3012/nested-comments?comment-id=${data.id}`
         );
         sDatad(raw_data.data.data);
+        
       } catch (error) {
         console.error(error);
       }
@@ -73,7 +74,7 @@ const Comment: React.FC<CommentProps> = ({
     nAppear(false);
   };
   const nComment = async () => {
-    await Axios.post(`http://localhost:3012/api/nested-comments`, {
+    await Axios.post(`http://localhost:3012/nested-comments`, {
       commentId: `${data.id}`,
       content: content,
     }).catch((e) => console.log(e));
@@ -130,12 +131,12 @@ const Comment: React.FC<CommentProps> = ({
         </div>
       </div>
       {/*대댓글의 갯수를 보여주는 객체, , 클릭시 hide false=>true*/}
-      {datad?.length === undefined ? null : (
+      {datad?.length? (
         <label htmlFor="hide" onClick={() => sHide(!hide)}>
           {hide ? <img src={C} alt="hide" /> : <img src={B} alt="show" />}
           {datad.length}개의 대댓글
         </label>
-      )}
+      ) : null}
       {/*hide는 기본 false=> 아무것도 안함
     true로 변화시 대댓글을 mapping해서 NComment 컴포넌트호출
   */}

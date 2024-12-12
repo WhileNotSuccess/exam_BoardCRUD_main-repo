@@ -6,6 +6,7 @@ interface categoryBanner {
 
 
 export const CreateCategory : React.FC<categoryBanner> = ({ boardName, categoryChange  }) => {
+  
   const CategoryButton = () => {
     categoryChange(boardName);
   };

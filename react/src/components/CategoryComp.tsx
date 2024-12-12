@@ -7,7 +7,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
 
 interface data {
   id:number,
-  boardName:string,
+  name:string,
 
 }
 
@@ -17,7 +17,8 @@ export const CategoryCompo = () => {
   const categoryList = useTypedSelector((state) => state.categoryList);
   const navigate = useNavigate();
   const fetchCategories = async () => {
-    const { data } = await axios.get("http://localhost:3012/api/category");
+    const { data } = await axios.get("http://localhost:3012/category");
+    
     dispatch({ type: "CATEGORYLIST_UPLOAD", payload: data.data });
   };
 
@@ -36,7 +37,7 @@ export const CategoryCompo = () => {
         {categoryList.map((data:data) => (
           <CreateCategory
             key={data.id}
-            boardName={data.boardName}
+            boardName={data.name}
             categoryChange={categoryChange}
           />
         ))}

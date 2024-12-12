@@ -25,6 +25,7 @@ const initialState: State = {
 };
 
 const rootReducer = (state: State = initialState, action: action) => {
+  
   switch (action.type) {
     case "CATEGORYLIST_UPLOAD":
       return { ...state, categoryList: action.payload };

@@ -23,7 +23,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
     whitelist: true,
-    forbidNonWhitelisted: true,
+    forbidNonWhitelisted: true, 
+    transformOptions:{
+      enableImplicitConversion:true
+    }
   }))
   app.use(cookieParser()) // 헤더의 쿠키값을 분석하고 객체형태로 변환해줌
   await app.listen(process.env.PORT ?? 3000);

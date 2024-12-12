@@ -69,12 +69,13 @@ export class CommentsService {
   }
 
   async remove(id: number, req:string) {
-    const queryRunner = this.dataSource.createQueryRunner()
-    const commentAuthor = await queryRunner.manager.findOne(Comment,{where:{id}})
+    
+    const commentAuthor = await this.dataSource.manager.findOne(Comment,{where:{id}})
       if (commentAuthor.author !== req){
         throw new ForbiddenException() // 403번에러 권한이 없음
       }
     const a = await this.dataSource.manager.findBy(NestedComment,{commentId:id})
+    const queryRunner = this.dataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
     try{

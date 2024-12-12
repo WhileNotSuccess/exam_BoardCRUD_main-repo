@@ -1,142 +1,146 @@
 .maindiv {
     display: flex;
-  }
-  .listmain {
-    margin-right: 5px;
-    margin-left: 5px;
-    width: 80%;
-    margin-top: 8px;
-  }
-  .comment {
-    display: flex;
-    flex-direction: column;
-    margin-right: 5px;
-    border-bottom: 1px solid black;
-  }
-  .ncomment {
-    border-top: 1px solid black;
-  }
-  .title-board {
-    box-sizing: border-box;
-    min-height: 10%;
-    height: 10%;
-    width: 100%;
-    background: #f0f5ff;
-    border-bottom: 1px solid rgba(4, 74, 254, 0.3);
-    display: flex;
-    align-items: center;
-  }
-  .author {
-    font-weight: bold;
-    box-sizing: border-box;
-    width: 100%;
-    background: #f0f5ff;
-    border-bottom: 1px solid rgba(4, 74, 254, 0.3);
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 10px;
-  }
+}
+.listmain {
+  margin-right: 5px;
+  margin-left: 5px;
+  width: 80%;
+  margin-top: 8px;
+}
+.comment {
+  display: flex;
+  flex-direction: column;
+  margin-right: 5px;
+  border-bottom: 1px solid black;
+}
+.ncomment {
+  border-top: 1px solid black;
+}
+.title-board {
+  box-sizing: border-box;
+  min-height: 10%;
+  height: 10%;
+  width: 100%;
+  background: #f0f5ff;
+  border-bottom: 1px solid rgba(4, 74, 254, 0.3);
+  display: flex;
+  align-items: center;
+}
+.author {
+  font-weight: bold;
+  box-sizing: border-box;
+  width: 100%;
+  background: #f0f5ff;
+  border-bottom: 1px solid rgba(4, 74, 254, 0.3);
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+
+.incomment {
+  position: relative;
+  display: flex;
+  overflow: clip;
+  justify-content: space-between;
+  left: 10px;
+  width: 99%;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.incomment > * {
+  height: 25px;
+  display: flex;
+}
+label {
+  height: 25px;
+  display: flex;
+  border-top: 1px solid black;
+  padding: 1px;
+  cursor: pointer;
+}
+.incomment > div > img,
+label > img {
+  height: 25px;
+}
+.incomment > .button {
+  display: block;
+  min-width: 172px;
+}
+.button > button,
+.nbutton > button {
+  cursor: pointer;
+  border-radius: 5px;
+}
+.announceComment {
+  border: 1px solid #c1c1c1;
+  background: #f0f5ff;
+  margin: 5px;
+  padding: 5px 0px 5px 15px;
+}
+.incomment > .nbutton {
+  display: block;
+  min-width: 86px;
+}
+#form {
+  padding: 5px 10px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+}
+
+input {
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+}
+form > button {
+  cursor: pointer;
+  border-radius: 1px;
+  height: inherit;
+  border: 1px solid #ced4da;
+}
+.listButton {
+  display: flex;
+  justify-content: flex-end;
+}
+.listButton > button {
+  cursor: pointer;
+  background: #b4c9ff;
+}
+#line {
+}
+#line > h3 {
+  margin: 0px;
+}
+#line > * {
+  padding: 5px;
+}
+.cAuthor {
+  margin-right: 5px;
+}
+.input-group-prepend > span {
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  line-height: 1.5;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-bottom-left-radius: 0.25rem;
+  border-top-left-radius: 0.25rem;
+}
   
-  .incomment {
-    position: relative;
-    display: flex;
-    overflow: clip;
-    justify-content: space-between;
-    left: 10px;
-    width: 99%;
-    margin-top: 3px;
-    margin-bottom: 3px;
-  }
-  
-  .incomment > * {
-    height: 25px;
-    display: flex;
-  }
-  label {
-    height: 25px;
-    display: flex;
-    border-top: 1px solid black;
-    padding: 1px;
-    cursor: pointer;
-  }
-  .incomment > div > img,
-  label > img {
-    height: 25px;
-  }
-  .incomment > .button {
-    display: block;
-    min-width: 172px;
-  }
-  .button > button,
-  .nbutton > button {
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  .announceComment {
-    border: 1px solid #c1c1c1;
-    background: #f0f5ff;
-    margin: 5px;
-    padding: 5px 0px 5px 15px;
-  }
-  .incomment > .nbutton {
-    display: block;
-    min-width: 86px;
-  }
-  #form {
-    padding: 5px 10px;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    margin-top: 2px;
-    display: flex;
-    align-items: center;
-  }
-  
-  input {
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-  }
-  form > button {
-    cursor: pointer;
-    border-radius: 1px;
-    height: inherit;
-    border: 1px solid #ced4da;
-  }
-  .listButton {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .listButton > button {
-    cursor: pointer;
-    background: #b4c9ff;
-  }
-  #line {
-  }
-  #line > h3 {
-    margin: 0px;
-  }
-  #line > * {
-    padding: 5px;
-  }
-  .cAuthor {
-    margin-right: 5px;
-  }
-  .input-group-prepend > span {
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 0.375rem 0.75rem;
-    line-height: 1.5;
-    text-align: center;
-    white-space: nowrap;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    border-bottom-left-radius: 0.25rem;
-    border-top-left-radius: 0.25rem;
-  }
-   
+img{
+  width:80%;
+  height:auto;
+}

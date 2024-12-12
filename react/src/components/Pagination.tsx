@@ -68,7 +68,7 @@ export const Pagination : React.FC<props> = ({
         }}
         disabled={!nextPage}
       >
-        <img src="arrow_forward.jpg " />
+        <img src="/images/arrow_forward.jpg " />
       </button>
     </>
   );

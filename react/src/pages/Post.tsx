@@ -82,16 +82,15 @@ const Post: React.FC = () => {
   const onclick = async (boardName: string) => {
     // 게시판이름을 기준으로 글을 업로드 하는 함수
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("category", boardName);
-
       const res = await Axios.post(
-        `http://localhost:3012/api/posts?category=${boardName}`,
-        formData,
+        `http://localhost:3012/posts?category=${boardName}`,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          title: title,
+          content: content,
+          category: boardName,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
         }
       );
 

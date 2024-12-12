@@ -4,7 +4,7 @@ import axios from 'axios';
 import "../styles/maincomp.css";
 import { CategoryCompo } from "../components/CategoryComp.tsx";
 import UserInfoCompo from '../components/UserInfoComp.tsx';
-/* import Pagination from "../components/Pagination"; */
+import Pagination from "../components/Pagination"; 
 import PostList from "../components/PostList.tsx";
 import DownSearch from "../components/DownSearch.tsx";
 import { useAuth } from "../hooks/auth";
@@ -23,7 +23,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
     const MainPage: React.FC = () => {
       // 리액트의 함수 컴포넌트 (React.FC)
       const [posts, setPosts] = useState<Posts[]>([]); // axios의 데이터만 저장(Posts 인터페이스의 항목들만)
-      const [currentPage, setCurrentPage] = useState<string>(""); // 현재 페이지
+      const [currentPage, setCurrentPage] = useState<number>(0); // 현재 페이지
       const [nextPage, setNextPage] = useState<string>(""); // 다음 페이지
       const [prevPage, setPrevPage] = useState<string>(""); // 이전 페이지
       const [postPerPage, setPostPerPage] = useState<number>(10); // 페이지에 띄울 글 갯수
@@ -39,7 +39,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
         // 메인 페이지 글 가져오기
         const { data } = await axios.get(
           // axios로 페이지의 원하는 값을 쿼리로 구분해서 가져와서 구조분해할당으로 안에서 data의 값만 가져오기
-          `http://localhost:3012/api/posts?category=${category}&limit=${postPerPage}&page=${page}
+          `http://localhost:3012/posts?category=${category}&limit=${postPerPage}&page=${page}
         `
         );
         // 가져온 값을 state에 설정
@@ -54,7 +54,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
       const fetchNotions = async () => {
         // 공지사항 글 가져오기
         const { data } = await axios.get(
-          `http://localhost:3012/api/posts?category=공지사항&limit=2
+          `http://localhost:3012/posts?category=공지사항&limit=2
         `
         );
         setNotion(data.data);
@@ -131,13 +131,13 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
           </button>
         </div>
       </div>
-      <UserInfoCompo user={user} />
+      <UserInfoCompo/>
 
       <DownSearch />
 
       <div className="down-banner">
         
-        {/* <Pagination // 백엔드 페이지네이션 추가 시 사용 예정
+        <Pagination // 백엔드 페이지네이션 추가 시 사용 예정
           postPerPage={postPerPage}
           totalPage={totalPage}
           paginate={paginate}
@@ -145,7 +145,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
           prevPage={prevPage}
           nextPage={nextPage}
           pageChange={pageChange}
-        /> */}
+        />
         
       </div>
     </div>

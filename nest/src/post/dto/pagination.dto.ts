@@ -3,14 +3,15 @@ import { IsInt, IsOptional, IsPositive, IsString} from "class-validator";
 
 
 export class PaginationDTO{
+    
+    @IsOptional()
     @IsInt()
     @IsPositive()
-    @IsOptional()
     page?:number;
 
+    @IsOptional()
     @IsInt()
     @IsPositive()
-    @IsOptional()
     @ApiProperty({
         example:1,
         description:'limit',
@@ -19,8 +20,8 @@ export class PaginationDTO{
     })
     limit?:number;
 
-    @IsString()
     @IsOptional()
+    @IsString()
     @ApiProperty({
         example:'category',
         description:'category',
