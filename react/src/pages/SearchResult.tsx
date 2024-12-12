@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "../styles/maincomp.css";
 import axios from "axios";
@@ -8,7 +8,7 @@ import PostList from "../components/PostList"; // 주소가 들어가면 게시�
 import Pagination from "../components/Pagination"; // 페이지네이션
 import DownSearch from "../components/DownSearch"; // 하단 검색창
 import { useSelector } from "react-redux";
-import { useAuth } from "../hooks/auth.ts";
+
 
 interface targetState {
   searchInput : string;
@@ -27,7 +27,6 @@ const SearchResult = () => {
   const [prevPage, setPrevPage] = useState(""); // 다음 페이지
   const [nextPage, setNextPage] = useState(""); // 이전 페이지
 
-  const {user} = useAuth();
 
   const fetchResult = async (page:number) => {
     const { data } = await axios.get(
