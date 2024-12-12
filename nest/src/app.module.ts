@@ -16,6 +16,7 @@ import { PostModule } from './post/post.module';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entities/category.entity';
 import { Post } from './post/entities/post.entity';
+import { Admin } from './user/entities/admin.entity';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { Post } from './post/entities/post.entity';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User, Comment,Category,Post],
+        entities:[User, Comment,Category,Post,Admin],
         synchronize:true
       })
     }),
