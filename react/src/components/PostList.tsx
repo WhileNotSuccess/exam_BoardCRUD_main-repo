@@ -45,17 +45,17 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
         const user = item.author;
         return (
           <div className="line-change" key={item.id} onClick={closeMenu}>
-            {category === '자유게시판' ? <span onClick={() => navig(`/post/${item.id}`)}>
+            {category === '자유게시판' ? <div className="title-value" onClick={() => navig(`/post/${item.id}`)}>
               [{item.category}] {item.title}
-            </span> : HTMLReactParser(item.content)}
-            <span
+            </div> : HTMLReactParser(item.content)}
+            <div
               className="user-value"
               onContextMenu={(e:React.MouseEvent<HTMLDivElement>) => rightClick(e, item.author)}
               style={{ display: "inline-block" }}
             >
               {user}
-            </span>
-            <span className="post-date">{date}</span>
+            </div>
+            <div className="post-date">{date}</div>
           </div>
         );
       })}

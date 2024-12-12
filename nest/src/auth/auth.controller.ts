@@ -27,6 +27,6 @@ export class AuthController {
       maxAge:1000*60*60,
       sameSite:'Lax'
     })
-    response.redirect(`${process.env.FRONTEND_URL}/user`)
+    response.redirect(`${process.env.FRONTEND_URL}/`)
   }
 }

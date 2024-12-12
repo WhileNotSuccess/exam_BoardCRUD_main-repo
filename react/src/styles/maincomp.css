@@ -23,6 +23,7 @@
   width: 90%;
   height: 94%;
   background: #ffffff;
+  cursor: pointer;
 }
 
 .user-info {
@@ -51,6 +52,7 @@
   background: rgba(4, 74, 254, 0.2);
   box-shadow: 1px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
+  text-decoration: none;
 }
 
 .logout-btn {
@@ -66,12 +68,12 @@
   background: rgba(4, 74, 254, 0.2);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+  text-decoration: none;
 }
 
 .post-list {
   width: 52vw;
   margin-top: 1%;
-  height: 55vh;
   background: rgba(210, 223, 255, 0.2);
   display: flex;
   flex-direction: column;
@@ -80,7 +82,7 @@
 
 .line-change {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   width: 100%;
   min-height: 30px;
@@ -89,11 +91,18 @@
   box-sizing: border-box;
 }
 
+/* .line-change span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} */
+
 .options-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
+  width: 100%;
 }
 
 .page-select {
@@ -137,7 +146,6 @@
   margin: 0;
   padding: 0;
   position: relative;
-  
 }
 
 .down-banner button {
@@ -167,7 +175,9 @@
 
 .options-right {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
+  width: 40%;
 }
 
 .page-select {
@@ -187,8 +197,21 @@
   text-align: left;
 }
 
+.title-value {
+  flex: 1;
+  max-width: 60%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+
 .user-value {
-  margin-left: 43%;
+  max-width: 15%;
+  margin-left: auto;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .post-user {
@@ -198,6 +221,10 @@
   margin-right: 25%;
 }
 .post-date {
+  max-width: 10%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   margin-left: auto;
 }
 

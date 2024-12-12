@@ -30,6 +30,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
       const [totalPage, setTotalPage] = useState<number>(0); // 총 페이지
       const [h_announce, setHAnnounce] = useState<boolean>(true); // 공지 숨기기
       const [notion, setNotion] = useState<Posts[]>([]); // 공지내용 가져오기
+      
       const nav = useNavigate()
       
       const category = useTypedSelector((state) => state.category); // 카테고리 (리듀서 사용해서 값 가져오기)
