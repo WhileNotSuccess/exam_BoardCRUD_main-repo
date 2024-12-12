@@ -16,7 +16,10 @@ interface targetState {
 }
 
 const SearchResult = () => {
-  const [postPerPage, setPostPerPage] = useState(10); // 한 페이지에 띄울 게시글 갯수
+  const [postPerPage, setPostPerPage] = useState(() => {
+    const saved = localStorage.getItem("postPerPage");
+    return saved ? JSON.parse(saved) : 10;
+  }); // 한 페이지에 띄울 게시글 갯수
   const location = useLocation();
   const { searchInput } = location.state; // 검색 내용을 location으로 값을 받아옴
   
