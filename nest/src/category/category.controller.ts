@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, Request, UseGuards } from "@nestjs/common";
 import { CategoryService } from "./category.service";
 import { CategoryDTO } from "./dto/category.dto";
 import { AuthGuard } from "@nestjs/passport";
@@ -22,9 +22,10 @@ export class CategoryController {
     @ApiOkResponse({ description: 'Category created successfully' })
     @ApiUnauthorizedResponse({ description: 'Unauthorized' })
     @UseGuards(AuthGuard('jwt'))
-    async postCategory(@Body() body: CategoryDTO) {
-        return await this.service.postCategory(body);
+    async postCategory(@Body() body: CategoryDTO, @Req() req:any){
+        return await this.service.postCategory(body,req.user)
     }
+   
 
     @Put(':id')
     @ApiOperation({ summary: 'Update an existing category' })

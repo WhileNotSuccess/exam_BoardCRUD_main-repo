@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res, UseGuards } from "@nestjs/common";
 import { PostService } from "./post.service";
 import { postDTO } from "./dto/post.dto";
 import { PaginationDTO } from "./dto/pagination.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiProperty, ApiPropertyOptional, ApiQuery, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { http } from "winston";
 import { SearchDTO } from "./dto/search.dto";
+import { AdminGuard } from "src/user/user.admin.guard";
 
 @ApiTags('posts')
 @Controller('posts')
@@ -13,7 +15,7 @@ export class PostController {
         private readonly postService: PostService
     ) {}
 
-    @ApiOperation({ summary: '메인페이지 pagination' })
+    @ApiOperation({summary:'메인페이지 pagination'})
     @ApiQuery({
         name: 'page',
         description: '현재 페이지',

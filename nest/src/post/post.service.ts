@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { postDTO } from "./dto/post.dto";
 import { DataSource } from "typeorm";
 import { Post } from "./entities/post.entity";
@@ -12,10 +12,10 @@ export class PostService{
     constructor(
         private readonly dataSource:DataSource
     ){}
-    queryRunner=this.dataSource.createQueryRunner();
-
+    
     async findPostById(id:number){
-        const returnValue=await this.queryRunner.manager.find(Post,{where:{id:id}})
+        const queryRunner=this.dataSource.createQueryRunner();
+        const returnValue=await queryRunner.manager.find(Post,{where:{id:id}})
         return {data:returnValue}
     }
   
@@ -41,8 +41,8 @@ export class PostService{
         // return search
     }
     async findPostAll(page:PaginationDTO){  //skip=1 limit=10 category=skiej
-        
-        const [search,total]=await this.queryRunner.manager.findAndCount(Post,{
+        const queryRunner=this.dataSource.createQueryRunner();
+        const [search,total]=await queryRunner.manager.findAndCount(Post,{
             skip:(page.page-1)*page.limit,
             take:page.limit,
             where:{category:page.category},
@@ -56,54 +56,57 @@ export class PostService{
         return search?{data:search,totalPage,currentPage,nextPage,prevPage}:null
     }
     async deletePost(id:number,user:string){
-        const post= await this.queryRunner.manager.findOneBy(Post,{id:id})
+        const queryRunner=this.dataSource.createQueryRunner();
+        const post= await queryRunner.manager.findOneBy(Post,{id:id})
         if(user!=post.author){
-            throw UnauthorizedException
+            throw new ForbiddenException()
         }
-        await this.queryRunner.connect();
-        await this.queryRunner.startTransaction();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
-            await this.queryRunner.manager.delete(Post,id)
-            await this.queryRunner.commitTransaction()
+            await queryRunner.manager.delete(Post,id)
+            await queryRunner.commitTransaction()
             return 'finished delete'
         } catch (e) {
-            await this.queryRunner.rollbackTransaction()
+            await queryRunner.rollbackTransaction()
             throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
-            await this.queryRunner.release()
+            await queryRunner.release()
         }
     }
     async updatePost(id:number,body:postDTO,user:string){
-        const post=await this.queryRunner.manager.findOneBy(Post,{id:id})
+        const queryRunner=this.dataSource.createQueryRunner();
+        const post=await queryRunner.manager.findOneBy(Post,{id:id})
         if(user!=post.author){
-            throw UnauthorizedException
+            throw new ForbiddenException()
         }
-        await this.queryRunner.connect()
-        await this.queryRunner.startTransaction()
+        await queryRunner.connect()
+        await queryRunner.startTransaction()
         try {
-            await this.queryRunner.manager.update(Post,id,body)
-            await this.queryRunner.commitTransaction()
+            await queryRunner.manager.update(Post,id,body)
+            await queryRunner.commitTransaction()
             return 'finished update'
         } catch (e) {
-            await this.queryRunner.rollbackTransaction()
+            await queryRunner.rollbackTransaction()
             throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
-            await this.queryRunner.release()
+            await queryRunner.release()
         }
     }
     async uploadPost(body:postDTO,user:string){
-        await this.queryRunner.connect()
-        await this.queryRunner.startTransaction()
+        const queryRunner=this.dataSource.createQueryRunner();
+        await queryRunner.connect()
+        await queryRunner.startTransaction()
         try { 
             const postContent={...body,author:user}
-            await this.queryRunner.manager.save(Post,postContent)
-            await this.queryRunner.commitTransaction()
+            await queryRunner.manager.save(Post,postContent)
+            await queryRunner.commitTransaction()
             return 'finished upload'
         } catch (e) {
-            await this.queryRunner.rollbackTransaction()
+            await queryRunner.rollbackTransaction()
             throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
-            await this.queryRunner.release()
+            await queryRunner.release()
         }
     }
     

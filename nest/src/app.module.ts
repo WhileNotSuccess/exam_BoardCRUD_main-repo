@@ -20,6 +20,7 @@ import * as winston from 'winston'
 import { WinstonModule } from 'nest-winston';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/http-exception.filter';
+import { Admin } from './user/entities/admin.entity';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { HttpExceptionFilter } from './common/http-exception.filter';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User, Comment,Category,Post, NestedComment],
+        entities:[User, Comment,Category,Post, NestedComment, Admin],
         synchronize:false
       })
     }),

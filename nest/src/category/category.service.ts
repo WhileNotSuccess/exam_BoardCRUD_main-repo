@@ -10,62 +10,66 @@ export class CategoryService{
     constructor(
         private readonly dataSource:DataSource
     ){}
-    queryRunner=this.dataSource.createQueryRunner();
     
     // 카테고리 이름 받기
     async getCategory(){
-        const cate= await this.queryRunner.manager.find(Category)
+        const queryRunner=this.dataSource.createQueryRunner();
+        const cate= await queryRunner.manager.find(Category)
         return cate;
     }
     //카테고리 신규 작성
-    async postCategory(body:CategoryDTO){
-        const category= await this.queryRunner.manager.exists(Category,{where:{name:body.name}})
+    async postCategory(body:CategoryDTO,user:any){
+        
+        const queryRunner=this.dataSource.createQueryRunner();
+        const category= await queryRunner.manager.exists(Category,{where:{name:body.name}})
         if(category){
             throw new ConflictException('already exists name')
         }else{
-            await this.queryRunner.connect();
-            await this.queryRunner.startTransaction();
+            await queryRunner.connect();
+            await queryRunner.startTransaction();
             try {
-                await this.queryRunner.manager.save(Category,body)
-                await this.queryRunner.commitTransaction()
+                await queryRunner.manager.save(Category,body)
+                await queryRunner.commitTransaction()
                 return 'post success'
             } catch (e) {
-                await this.queryRunner.rollbackTransaction();
+                await queryRunner.rollbackTransaction();
                 throw new BadRequestException(`${e.sqlMessage}`)
             }finally{
-                await this.queryRunner.release()
+                await queryRunner.release()
             }
         }
     }
     //카테고리 삭제
     async deleteCategory(id:number){
-        await this.queryRunner.connect();
-        await this.queryRunner.startTransaction();
+        const queryRunner=this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try{
-            await this.queryRunner.manager.delete(Category,id);
-            await this.queryRunner.commitTransaction();
+            await queryRunner.manager.delete(Category,id);
+            await queryRunner.commitTransaction();
             return 'delete success'
         }catch(e){
-            await this.queryRunner.rollbackTransaction();
+            await queryRunner.rollbackTransaction();
             throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
-            await this.queryRunner.release();
+            await queryRunner.release();
         }
         
     }
     //카테고리 이름 변경
     async updateCategory(id:number,body:CategoryDTO){
-        await this.queryRunner.connect();
-        await this.queryRunner.startTransaction();
+        const queryRunner=this.dataSource.createQueryRunner();
+        await queryRunner.connect();
+        await queryRunner.startTransaction();
         try {
-            await this.queryRunner.manager.update(Category,id,body)
-            await this.queryRunner.commitTransaction();
+            await queryRunner.manager.update(Category,id,body)
+            await queryRunner.commitTransaction();
             return 'put success' 
         } catch (e) {
-            await this.queryRunner.rollbackTransaction();
+            await queryRunner.rollbackTransaction();
             throw new BadRequestException(`${e.sqlMessage}`)
         }finally{
-            await this.queryRunner.release();
+            await queryRunner.release();
         }
     }
 }
