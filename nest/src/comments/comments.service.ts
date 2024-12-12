@@ -42,8 +42,6 @@ export class CommentsService {
       data: await this.dataSource.manager.findBy(Comment,{postId:postId})
     }
   }
-
-
   async update(id: number, updateCommentDto: UpdateCommentDto, req:string) {
     
     const queryRunner = this.dataSource.createQueryRunner()

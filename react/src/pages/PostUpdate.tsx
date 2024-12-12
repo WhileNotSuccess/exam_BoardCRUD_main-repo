@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import "../css/PostComp.css";
+import "../styles/PostComp.css";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../hooks/auth";
 import {Axios} from "../lib/axios";
