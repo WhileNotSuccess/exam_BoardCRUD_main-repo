@@ -327,3 +327,8 @@
 .post-btn:hover {
   background-color: #0056b3;
 }
+
+.out-container{
+  display:flex;
+  flex-direction: column;
+}

@@ -93,7 +93,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
     }
 
   return (
-    <>
+    <div className='out-container'>
     <div className="container">
       <CategoryCompo />
       <div className="post-list">
@@ -136,7 +136,9 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
 
       <DownSearch />
 
-      <div className="down-banner">
+      
+    </div>
+    <div className="down-banner">
         
         <Pagination // 백엔드 페이지네이션 추가 시 사용 예정
           postPerPage={postPerPage}
@@ -149,8 +151,7 @@ import { useTypedSelector } from "../useTypedSelector.tsx";
         />
         
       </div>
-    </div>
-  </>
+  </div>
   )
 }
 
