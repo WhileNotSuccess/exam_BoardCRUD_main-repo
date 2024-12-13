@@ -23,7 +23,7 @@ const initialState: State = {
   totalPage: 0,
   target: "title",
 };
-
+  
 const rootReducer = (state: State = initialState, action: action) => {
   
   switch (action.type) {

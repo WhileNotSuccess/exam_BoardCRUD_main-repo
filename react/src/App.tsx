@@ -8,6 +8,7 @@ import Nav from "./components/Nav"
 import UserPage from "./pages/UserPage"
 import SearchResult from "./pages/SearchResult"
 import ListIn from "./pages/Listin"
+import PostUpdate from "./pages/PostUpdate"
 function App() {
   return(
   <>
@@ -23,6 +24,7 @@ function App() {
       <Route path="/post" element={<Post />}/>
       <Route path="/image-test" element={<ImageUpload />}/>
       <Route path="/post/:id" element={<ListIn />}/>
+      <Route path="/post-update/:id" element={<PostUpdate />}/>
     </Routes>
     </BrowserRouter>
   </>

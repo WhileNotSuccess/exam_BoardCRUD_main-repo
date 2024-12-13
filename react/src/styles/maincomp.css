@@ -212,6 +212,7 @@
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .post-user {
@@ -287,9 +288,6 @@
   outline: none;
 }
 
-.user-value {
-  cursor: pointer;
-}
 
 .context-menu {
   background-color: white;
@@ -328,7 +326,102 @@
   background-color: #0056b3;
 }
 
-.out-container{
-  display:flex;
+.memberBox {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.member {
+  background: #ffffff;
+  border-radius: 15px;
+  display: flex;
   flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.member:hover {
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.memberTitle {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #4A90E2;
+  margin-bottom: 15px;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.memberContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  font-size: 1em;
+  color: #666;
+  line-height: 1.5;
+  padding: 10px 0;
+}
+
+.memberContent img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.updateBtn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8em;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.updateBtn:hover {
+  background-color: #0056b3;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.updateBtn:focus {
+  outline: none;
+}
+
+.deleteBtn {
+  position: absolute;
+  bottom: 5px;
+  right: 70px;
+  background-color: #d9534f;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8em;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.deleteBtn:hover {
+  background-color: #c9302c;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.deleteBtn:focus {
+  outline: none;
 }

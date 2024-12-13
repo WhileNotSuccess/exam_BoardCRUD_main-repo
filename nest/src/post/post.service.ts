@@ -6,12 +6,15 @@ import { PaginationDTO } from "./dto/pagination.dto";
 import { error } from "console";
 import { SearchDTO } from "./dto/search.dto";
 import { Category } from "src/category/entities/category.entity";
+import { CommentsService } from "src/comments/comments.service";
+import { Comment } from "src/comments/entities/comment.entity";
 
 
 @Injectable()
 export class PostService{
     constructor(
-        private readonly dataSource:DataSource
+        private readonly dataSource:DataSource,
+        private commentService:CommentsService
     ){}
     
     async findPostById(id:number){
@@ -52,7 +55,7 @@ export class PostService{
         };
     }
     
-    async findPostAll(page:PaginationDTO){  //skip=1 limit=10 category=skiej
+    async findPostAll(page:PaginationDTO){  //skip=1 limit=10 category=자유게시판
         
         const [search,total]=await this.dataSource.manager.findAndCount(Post,{
             skip:(page.page-1)*page.limit,
@@ -69,15 +72,20 @@ export class PostService{
         return search?{data:search,totalPage,currentPage,nextPage,prevPage}:null
     }
     async deletePost(id:number,user:string){
-        
         const post= await this.dataSource.manager.findOneBy(Post,{id:id})
         if(user!=post.author){
             throw new ForbiddenException()
         }
+        const commentsIds=await this.dataSource.createQueryBuilder()
+        .select('Comment.id').from(Comment,'Comment').where('postId = :id',{id:id}).getMany()
+
         const queryRunner=this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
+            await Promise.all(
+                commentsIds.map(async data=>await this.commentService.remove(data.id,user))
+            )
             await queryRunner.manager.delete(Post,id)
             await queryRunner.commitTransaction()
             return 'finished delete'

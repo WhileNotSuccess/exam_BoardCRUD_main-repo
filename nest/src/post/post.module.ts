@@ -5,6 +5,7 @@ import { APP_PIPE } from "@nestjs/core";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Post } from "./entities/post.entity";
 import { UserModule } from "src/user/user.module";
+import { CommentsModule } from "src/comments/comments.module";
 
 @Module({
     providers:[
@@ -19,7 +20,7 @@ import { UserModule } from "src/user/user.module";
         //     })
         // }
         PostService],
-    imports:[UserModule],
+    imports:[UserModule,CommentsModule],
     controllers:[PostController],
     
 })

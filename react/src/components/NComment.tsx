@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Axios } from "../lib/axios";
 import A from "../../public/images/enter2.png";
 import { NestedComment } from "./Comment";
@@ -6,54 +6,57 @@ import { NestedComment } from "./Comment";
 interface NestedProps {
   data: NestedComment;
   render: boolean;
-  sRender: (render: boolean) => void;
+  setRender: (render: boolean) => void;
   user: string | undefined;
-  conid: number;
-  sConid: (id: number) => void;
+  commentId: number;
+  setCommentId: (id: number) => void;
 }
 const NComment: React.FC<NestedProps> = ({
   data,
   render,
-  sRender,
+  setRender,
   user,
-  conid,
-  sConid,
+  commentId,
+  setCommentId,
 }) => {
   const nestComment: NestedComment = data; //nestedComment 저장
-  const [appear, nAppear] = useState<boolean>(false); //대댓글 수정창을 띄우기위한 state
+  const [nestedAppear, setNestedAppear] = useState<boolean>(false); //대댓글 수정창을 띄우기위한 state
   const [content, sContent] = useState<string>(""); //대댓글 수정내용을 저장하는 state
 
   const deleter = async () => {
     await Axios.delete(
       `http://localhost:3012/nested-comments/${nestComment?.id}`
     ).catch((e) => console.log(e));
-    sRender(!render);
+    setRender(!render);
   };
-  const remake = async () => {
-    await Axios.put(
+  const remake = async (e:FormEvent) => {
+    e.preventDefault();
+    await Axios.patch(
       `http://localhost:3012/nested-comments/${nestComment?.id}`,
       {
         content: content,
       }
     ).catch((e) => console.log(e));
-
     sContent("");
-    nAppear(!appear);
-    sRender(!render);
-    sConid(0);
+    setNestedAppear(false);
+    setRender(!render);
+    setCommentId(0);
   };
 
   return (
     <>
       <div className="ncomment">
         <div className="incomment">
-          <div>
-            <img src={A} alt={""} />
-            {nestComment?.content}
+          <div className="nestedComment">
+            <div className="nestedCommentContent">
+              <img src={A} alt={""} />
+              {nestComment?.content}
+            </div>
+            <div className="nestedCommentAuthor">작성자:{nestComment?.author}</div>
           </div>
           {nestComment?.author === user ? (
             <div className="nbutton">
-              {appear && conid === -1 * nestComment.id ? (
+              {nestedAppear && commentId === -1 * nestComment.id ? (
                 <>
                   <form onSubmit={remake}>
                     <input
@@ -68,8 +71,8 @@ const NComment: React.FC<NestedProps> = ({
                 <>
                   <button
                     onClick={() => {
-                      nAppear(!appear);
-                      sConid(nestComment?.id);
+                      setNestedAppear(true);
+                      setCommentId(-1*(nestComment.id));
                     }}
                   >
                     수정

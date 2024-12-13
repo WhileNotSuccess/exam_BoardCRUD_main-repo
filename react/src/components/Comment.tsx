@@ -7,11 +7,11 @@ import NComment from "./NComment";
 
 interface CommentProps {
   data: CommentData;
-  urender: boolean;
-  urRender: (render: boolean) => void;
+  render: boolean;
+  setRender: (render: boolean) => void;
   user: string | undefined;
-  conid: number;
-  sConid: (id: number) => void;
+  commentId: number;
+  setCommentId: (id: number) => void;
 }
 export interface NestedComment {
   id: number;
@@ -22,75 +22,76 @@ export interface NestedComment {
 
 const Comment: React.FC<CommentProps> = ({
   data,
-  urender,
-  urRender,
+  render,
+  setRender,
   user,
-  conid,
-  sConid,
+  commentId,
+  setCommentId,
 }) => {
-  const [datad, sDatad] = useState<NestedComment[]>(); // 대댓글 저장을 위한 state
+  const [NestedComments, setNestedComments] = useState<NestedComment[]>(); // 대댓글 저장을 위한 state
   const [content, sContent] = useState<string>(""); // 댓글 수정을 위한 state
-  const [render, sRender] = useState<boolean>(false); // 대댓글 변화시 렌더링을 위한 state
-  const [cAppear, sCAppear] = useState<boolean>(false); // 대댓글 작성 창을 띄우기위한 state
-  const [appear, nAppear] = useState<boolean>(false); // 댓글 수정 창을 띄우기위한 state
-  const [hide, sHide] = useState<boolean>(false); // 대댓글을 안보이게 하는 state
-
-  useEffect(() => {
-    async function binary() {
-      try {
-        const raw_data = await Axios.get(
-          `http://localhost:3012/nested-comments?comment-id=${data.id}`
-        );
-        sDatad(raw_data.data.data);
-        
-      } catch (error) {
-        console.error(error);
-      }
+  // const [render, setRender] = useState<boolean>(false); // 대댓글 변화시 렌더링을 위한 state
+  const [nestedAppear, setNestedAppear] = useState<boolean>(false); // 대댓글 작성 창을 띄우기위한 state
+  const [commentRemakeAppear, setCommentRemakeAppear] = useState<boolean>(false); // 댓글 수정 창을 띄우기위한 state
+  const [NestedHide, setNestedHide] = useState<boolean>(false); // 대댓글을 안보이게 하는 state
+  
+  async function getNestedComment() {
+    try {
+      const receiveData = await Axios.get(
+        `http://localhost:3012/nested-comments?comment-id=${data.id}`
+      );
+      setNestedComments(receiveData.data.data);  
+    } catch (error) {
+      console.error(error);
     }
-    binary();
+  }
+  useEffect(() => {
+    getNestedComment();
   }, [data, render]);
+  //form 태그의 작
   const configer = (e: FormEvent) => {
     e.preventDefault();
-    if (cAppear && appear === false) {
-      if (cAppear) {
-        nComment();
-      } else if (appear) {
-        remake();
-      }
-      sContent("");
-      urRender(!urender);
+    if (nestedAppear) {
+      nComment();
+    } else if (commentRemakeAppear) {
+      remake();
     }
+    sContent("");
   };
   const deleter = async () => {
     await Axios.delete(`http://localhost:3012/comments/${data.id}`).catch(
       (e) => console.log(e)
     );
-    urRender(!urender);
+    setRender(!render);
   };
   const remake = async () => {
     await Axios.put(`http://localhost:3012/comments/${data.id}`, {
       content: content,
     }).catch((e) => console.log(e));
-    nAppear(false);
+    setCommentRemakeAppear(false);
+    setRender(!render)
   };
   const nComment = async () => {
     await Axios.post(`http://localhost:3012/nested-comments`, {
       commentId: `${data.id}`,
       content: content,
     }).catch((e) => console.log(e));
-    sCAppear(false);
+    setNestedAppear(false);
+    setRender(!render)
   };
 
   return (
     <div className="comment">
       <div className="incomment">
-        <div>{data.content}</div>
+        <div className="contentSpaceBetween">
+        <div>{data.content}</div><div className="cAuthor">작성자:{data.author}</div>
+        </div>
         <div>
-          <div className="cAuthor">작성자:{data.author}</div>
+          
           {/*대댓글 작성,댓글 수정,삭제 버튼, form */}
           <div className="button">
-            {/*cAppear(대댓글작성),appear(댓글 수정) 어느쪽이 하나라도 true이고 conid와 댓글의 id가 일치할경우 form으로 전환*/}
-            {cAppear || (appear && conid === data.id) ? (
+            {/*nestedAppear(대댓글작성),commentRemakeAppear(댓글 수정) 어느쪽이 하나라도 true이고 commentId와 댓글의 id가 일치할경우 form으로 전환*/}
+            {nestedAppear || (commentRemakeAppear && commentId === data.id) ? (
               <form onSubmit={configer}>
                 <input
                   type="text"
@@ -101,22 +102,22 @@ const Comment: React.FC<CommentProps> = ({
               </form>
             ) : (
               <>
-                {/*click시 conid에 댓글 아이디 저장, cAppear false=>true*/}
+                {/*click시 commentId에 댓글 아이디 저장, nestedAppear false=>true*/}
                 <button
                   onClick={() => {
-                    sConid(data.id);
-                    sCAppear(!cAppear);
+                    setCommentId(data.id);
+                    setNestedAppear(!nestedAppear);
                   }}
                 >
                   대댓글 작성
                 </button>
-                {/*사용자와 댓글의 작성자가 같을 경우 구현, 클릭시 conid에 댓글 id 저장, appear false=>true */}
+                {/*사용자와 댓글의 작성자가 같을 경우 구현, 클릭시 commentId에 댓글 id 저장, commentRemakeAppear false=>true */}
                 {user === data.author ? (
                   <>
                     <button
                       onClick={() => {
-                        sConid(data.id);
-                        nAppear(!appear);
+                        setCommentId(data.id);
+                        setCommentRemakeAppear(!commentRemakeAppear);
                       }}
                     >
                       수정
@@ -130,28 +131,28 @@ const Comment: React.FC<CommentProps> = ({
           </div>
         </div>
       </div>
-      {/*대댓글의 갯수를 보여주는 객체, , 클릭시 hide false=>true*/}
-      {datad?.length? (
-        <label htmlFor="hide" onClick={() => sHide(!hide)}>
-          {hide ? <img src={C} alt="hide" /> : <img src={B} alt="show" />}
-          {datad.length}개의 대댓글
+      {/*대댓글의 갯수를 보여주는 객체, , 클릭시 NestedHide false=>true*/}
+      {NestedComments?.length? (
+        <label htmlFor="NestedHide" onClick={() => setNestedHide(!NestedHide)}>
+          {NestedHide ? <img src={C} alt="NestedHide" /> : <img src={B} alt="show" />}
+          {NestedComments.length}개의 대댓글
         </label>
       ) : null}
       {/*hide는 기본 false=> 아무것도 안함
     true로 변화시 대댓글을 mapping해서 NComment 컴포넌트호출
   */}
-      {hide
-        ? datad?.map((att) => {
+      {NestedHide
+        ? NestedComments?.map((data) => {
             return (
               <NComment
                 // props 전달 목록 key,대댓글, '대댓글 변화시 렌더링을 위한 state,setState',사용자 이름, '댓글,대댓글 수정시 다른 수정창을 닫기위한 state,setState'
-                key={att.id} //key
-                data={att} //대댓글
+                key={data.id} //key
+                data={data} //대댓글
                 render={render} //대댓글 변화시 렌더링을 위한 state,setState
-                sRender={sRender}
+                setRender={setRender}
                 user={user} //사용자 이름
-                conid={conid} //댓글 대댓글 수정시 다른 수정창을 닫기위한 state,setState
-                sConid={sConid}
+                commentId={commentId} //댓글 대댓글 수정시 다른 수정창을 닫기위한 state,setState
+                setCommentId={setCommentId}
               />
             );
           })
