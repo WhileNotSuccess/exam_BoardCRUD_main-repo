@@ -7,6 +7,7 @@ import { DataSource, Repository } from 'typeorm';
 import { NestedCommentService } from 'src/nested-comment/nested-comment.service';
 import { NestedComment } from 'src/nested-comment/entities/nested-comment.entity';
 import { error } from 'console';
+import { Post } from 'src/post/entities/post.entity';
 
 //트랜잭션은 수정 삭제 추가에서 사용 단순히 GET에서는 할필요 없음
 @Injectable()
@@ -94,17 +95,24 @@ export class CommentsService {
     }
   }
   async getUserComment(limit:number,page:number,author:string){
-    const [content,total]=await this.dataSource.manager.findAndCount(Comment,{
-      where:{author:author},
-      skip:(page-1)*limit,
-      take:limit,
-      order:{createAt:'DESC'}
-    })
-    const totalPage=Math.ceil(total/limit)
+    const content2=await this.dataSource.createQueryBuilder()
+    .select('comment.postId').from(Comment,'comment').where({author:author})
+    .getMany()
+    const newArray=[]
+    content2.forEach(item=>newArray.push(item.postId))
+    console.log('array',newArray)
+    const [returnPost,total3]=await this.dataSource.createQueryBuilder()
+    .select('post').from(Post,'post').where(
+      'id IN :array',{array:[newArray]}
+    ).skip((page-1)*limit)
+    .getManyAndCount()
+    console.log('return',returnPost)
+    const totalPage=Math.ceil(total3/limit)
     const currentPage=page
     const nextPage=totalPage-currentPage?`http://localhost:3012/posts?page=${currentPage+1}`:null
     const prevPage=currentPage-1?`http://localhost:3012/posts?page=${currentPage-1}`:null
     
-    return content?{data:content,totalPage,currentPage,nextPage,prevPage}:null
+
+    return returnPost?{data:returnPost,totalPage,currentPage,nextPage,prevPage}:null
   }
 }

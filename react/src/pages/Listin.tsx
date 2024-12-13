@@ -73,7 +73,10 @@ const ListIn = () => {
     },
     {
       headers:{'Content-type':'application/json'}
-    }).catch((e: unknown) => console.log(e));
+    }).catch((e: any) =>{
+       if(e.response.status==401){
+        alert('로그인 후 이용해 주세요')
+      }})
     setRender(!render);
   };
   //post-update페이지로 navigate

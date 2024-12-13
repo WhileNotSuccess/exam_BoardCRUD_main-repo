@@ -8,6 +8,7 @@ import Pagination from "../components/Pagination";
 import PostList from "../components/PostList.tsx";
 import DownSearch from "../components/DownSearch.tsx";
 import { useTypedSelector } from "../useTypedSelector.tsx";
+import { useDispatch } from 'react-redux';
 
 interface Posts {   // 불러온 게시글의 인터페이스스
   id: number;
@@ -65,13 +66,21 @@ const MainPage: React.FC = () => {
     fetchNotions();
   }, []);
 
-  useEffect(() => {             
-    localStorage.setItem("postPerPage", JSON.stringify(postPerPage)); // 로컬 스토리지 값 변경
+  useEffect(() => {
+    
+    localStorage.setItem("postPerPage", JSON.stringify(postPerPage)) // 로컬 스토리지 값 변경
+    
   }, [postPerPage]);
 
   useEffect(() => {
-    localStorage.setItem("h_announce", JSON.stringify(h_announce)); // 로컬 스토리지 값 변경
-  }, [h_announce]);
+    
+    if (category === "조원소개" || category === "공지사항" || category === "현지학기제") {
+      setHAnnounce(true);
+    } else {
+      localStorage.setItem("h_announce", JSON.stringify(h_announce)); 
+    }
+  }, [category, h_announce]); 
+  
 
   const pageChange = async (url: string) => { // 좌우 페이지 이동 버튼 클릭 시 게시글 이동동
     if (url) {
@@ -97,6 +106,7 @@ const MainPage: React.FC = () => {
 
           {category !== "조원소개" && ( // 조원 소개 페이지에선 공지 숨기기, 게시글 설정 옵션을 띄우지 않음
             <div className="options-right">
+              {category === "공지사항" || category === "현지학기제" ? <></> :
               <form onSubmit={(e) => e.preventDefault()}> 
                 <input
                   type="checkbox"
@@ -105,6 +115,7 @@ const MainPage: React.FC = () => {
                 />
                 공지숨기기
               </form>
+                }   
               <select
                 value={postPerPage}
                 onChange={(e) => setPostPerPage(Number(e.target.value))}

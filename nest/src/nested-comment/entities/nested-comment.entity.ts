@@ -1,5 +1,5 @@
 import { Comment } from "../../comments/entities/comment.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class NestedComment {
@@ -18,4 +18,10 @@ export class NestedComment {
   
   @Column()
   content:string
+
+  @CreateDateColumn()
+    createdAt : string
+  
+  @UpdateDateColumn()
+  updatedAt : string
 }

@@ -5,5 +5,5 @@ export class Admin{
     @PrimaryGeneratedColumn()
     id:number
     @Column()
-    name:number
+    name:string
 }
