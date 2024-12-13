@@ -9,7 +9,7 @@ import PostList from "../components/PostList.tsx";
 import DownSearch from "../components/DownSearch.tsx";
 import { useTypedSelector } from "../useTypedSelector.tsx";
 
-interface Posts {
+interface Posts {   // 불러온 게시글의 인터페이스스
   id: number;
   title: string;
   content: string;
@@ -20,20 +20,20 @@ interface Posts {
 }
 
 const MainPage: React.FC = () => {
-  const [posts, setPosts] = useState<Posts[]>([]); 
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [nextPage, setNextPage] = useState<string>("");
-  const [prevPage, setPrevPage] = useState<string>("");
-  const [postPerPage, setPostPerPage] = useState<number>(() => {
+  const [posts, setPosts] = useState<Posts[]>([]);  // 게시글 배열
+  const [currentPage, setCurrentPage] = useState<number>(1); // 현재 페이지
+  const [nextPage, setNextPage] = useState<string>(""); // 다음 페이지
+  const [prevPage, setPrevPage] = useState<string>(""); // 이전 페이지
+  const [postPerPage, setPostPerPage] = useState<number>(() => {  // 게시글 갯수 (로컬 스토리지에 저장)
     const saved = localStorage.getItem("postPerPage");
-    return saved ? JSON.parse(saved) : 10;
+    return saved ? JSON.parse(saved) : 10;      //
   });
   const [totalPage, setTotalPage] = useState<number>(0);
-  const [h_announce, setHAnnounce] = useState<boolean>(() => {
+  const [h_announce, setHAnnounce] = useState<boolean>(() => {    // 공지 숨기기 (onoff 여부 로컬 스토리지 저장장)
     const saved = localStorage.getItem("h_announce");
     return saved ? JSON.parse(saved) : true;
   });
-  const [notion, setNotion] = useState<Posts[]>([]);
+  const [notion, setNotion] = useState<Posts[]>([]);    // 공지사항 리스트 (가장 최신 글 2개만 가져옴)
 
   const category = useTypedSelector((state) => state.category);
   const navigate = useNavigate();
@@ -50,30 +50,30 @@ const MainPage: React.FC = () => {
     setTotalPage(data.totalPage);
   };
 
-  const fetchNotions = async () => {
+  const fetchNotions = async () => {    // 공지사항 글 가져오기기
     const { data } = await axios.get(
       `http://localhost:3012/posts?category=공지사항&limit=2`
     );
     setNotion(data.data);
   };
 
-  useEffect(() => {
+  useEffect(() => {       // 게시판이 바뀌거나 조정하려는 글 갯수 변경 시 다시 렌더링링
     fetchPosts(1);
   }, [category, postPerPage]);
 
-  useEffect(() => {
+  useEffect(() => {       // 렌더링 시 공지 사항 불러오는 함수 호출출
     fetchNotions();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("postPerPage", JSON.stringify(postPerPage));
+  useEffect(() => {             
+    localStorage.setItem("postPerPage", JSON.stringify(postPerPage)); // 로컬 스토리지 값 변경
   }, [postPerPage]);
 
   useEffect(() => {
-    localStorage.setItem("h_announce", JSON.stringify(h_announce));
+    localStorage.setItem("h_announce", JSON.stringify(h_announce)); // 로컬 스토리지 값 변경
   }, [h_announce]);
 
-  const pageChange = async (url: string) => {
+  const pageChange = async (url: string) => { // 좌우 페이지 이동 버튼 클릭 시 게시글 이동동
     if (url) {
       const { data } = await axios.get(url);
       setPosts(data.data);
@@ -84,8 +84,8 @@ const MainPage: React.FC = () => {
     }
   };
 
-  const paginate = (pageNumber: number) => {
-    fetchPosts(pageNumber);
+  const paginate = (pageNumber: number) => {    // 페이지 번호를 인자값으로 받아 페이지 렌더링
+    fetchPosts(pageNumber);   
   };
 
   return (
@@ -95,9 +95,9 @@ const MainPage: React.FC = () => {
         <div className="options-container">
           <div className="category-name">{category}</div>
 
-          {category !== "조원소개" && (
+          {category !== "조원소개" && ( // 조원 소개 페이지에선 공지 숨기기, 게시글 설정 옵션을 띄우지 않음
             <div className="options-right">
-              <form onSubmit={(e) => e.preventDefault()}>
+              <form onSubmit={(e) => e.preventDefault()}> 
                 <input
                   type="checkbox"
                   checked={h_announce}
@@ -119,7 +119,7 @@ const MainPage: React.FC = () => {
         </div>
 
 
-        {category==="조원소개" ? <></> : 
+        {category==="조원소개" ? <></> : // 조원소개 페이지에선 제목, 작성자, 일자 문구를 띄우지 않음
         <div className="post-header">
           <span className="post-title">글 제목</span>
           <span className="post-user">작성자</span>
@@ -154,3 +154,4 @@ const MainPage: React.FC = () => {
 };
 
 export default MainPage;
+

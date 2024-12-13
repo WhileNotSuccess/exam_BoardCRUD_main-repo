@@ -1,12 +1,13 @@
+import React from "react";
+
 interface categoryBanner {
   key: number;
   boardName: string;
-  categoryChange : (boardName:string) => void;
+  categoryChange: (boardName: string) => void;
 }
 
+export const CreateCategory: React.FC<categoryBanner> = ({ boardName, categoryChange }) => {
 
-export const CreateCategory : React.FC<categoryBanner> = ({ boardName, categoryChange  }) => {
-  
   const CategoryButton = () => {
     categoryChange(boardName);
   };

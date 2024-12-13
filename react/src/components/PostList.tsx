@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/maincomp.css";
 import { useNavigate } from "react-router-dom";
 import HTMLReactParser from "html-react-parser/lib/index";
 import { useTypedSelector } from "../useTypedSelector";
 import { Axios } from "../lib/axios";
 
-interface List {
+interface List {  // 띄울 글의 인터페이스
   author: string;
   category: string;
   content: string;
@@ -15,7 +15,7 @@ interface List {
   updatedAt: string;
 }
 
-interface PostListProps {
+interface PostListProps {   // 부모 컴포넌트에서 받은 띄울 글의 배열
   list: List[];
 }
 
@@ -24,7 +24,7 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
   const [display, setDisplay] = useState({ x: 0, y: 0 }); // 마우스 우클릭 한 위치를 담을 변수
   const [posts, setPosts] = useState<List[]>(list); // 게시글 목록 상태로 관리
   const navig = useNavigate();
-  const category = useTypedSelector((state) => state.category);
+  const category = useTypedSelector((state) => state.category); // 리듀스를 이용해서 카테고리를 변경경
 
   const rightClick = (e: React.MouseEvent<HTMLDivElement>, user: string) => {
     // 마우스 우클릭 함수
@@ -59,12 +59,14 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
     }
   };
 
+  useEffect(() => { setPosts(list); }, [list]); // 카테고리가 변경되면 내용도 변경되서 Effect로 실시간 변경
+  
   return (
     <>
       {posts.map((item: List) => {
         const date = item.createdAt.substring(0, 10);
         const user = item.author;
-        return category === "조원소개" ? (
+        return category === "조원소개" ? (        // 조원소개 페이지일땐 다른 디자인으로 div 띄우기
           <div className="memberBox" key={item.id}>
             <div className="member">
               <div className="memberTitle">{item.title}</div>
@@ -77,15 +79,12 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
               </button>
             </div>
           </div>
-        ) : (
-          <div className="line-change" key={item.id} onClick={closeMenu}>
-            {category === "자유게시판" ? (
+        ) : (   // 조원소개 이외에는 게시글 형태로 클릭 시 listin 이동
+          <div className="line-change" key={item.id} onClick={closeMenu}>   
               <span onClick={() => navig(`/post/${item.id}`)}>
                 [{item.category}] {item.title}
               </span>
-            ) : (
-              HTMLReactParser(item.content)
-            )}
+            
             <span
               className="user-value"
               onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => rightClick(e, item.author)}
