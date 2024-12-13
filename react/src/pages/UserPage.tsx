@@ -1,12 +1,11 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { CategoryCompo } from "../components/CategoryComp.tsx";
 import UserInfoCompo from "../components/UserInfoComp.tsx";
 import "../styles/userpage.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import { useAuth } from "../hooks/auth.ts";
-
+import { Axios } from "../lib/axios.ts";
 interface item {
   id: number;
   title: string;
@@ -32,8 +31,8 @@ const UserPage = () => {
   const {user} = useAuth();
   // 작성글 데이터를 가져오는 함수
   const postData = async (page:number) => {
-    const { data } = await axios.get(
-      `http://localhost:3012/search?content=${author}&target=author&limit=${postPerPage}&page=${page}`
+    const { data } = await Axios.get(
+      `http://localhost:3012/posts/search?content=${author}&target=author&limit=${postPerPage}&page=${page}`
     );
     setUserData(data.data);
     setPrevPage(data.prevPage);
@@ -45,7 +44,7 @@ const UserPage = () => {
   // 댓글단 글 데이터를 가져오는 함수
   const commentData = async (page:number) => {
     try {
-      const response = await axios.get(
+      const response = await Axios.get(
         `http://localhost:3012/find-post-by-comment?limit=10&page=${page}`,
         {
           headers: {
@@ -54,7 +53,7 @@ const UserPage = () => {
         }
       );
       // 댓글의 값이 들어온다면 정상적으로 띄우고
-      // 값이 없다면 빈배열 처리(사용자가 댓글을 달지 않으면 헤더값이 없어서 오류가 나기에 오류를   빈배열 처리)
+      // 값이 없다면 빈배열 처리(사용자가 댓글을 달지 않으면 헤더값이 없어서 오류가 나기에 오류를  빈배열 처리)
       const data = response.data || {};
       setUserData(data.data || []);
       setPrevPage(data.prevPage || "");
@@ -83,7 +82,7 @@ const UserPage = () => {
   // 페이지 이동을 위한 함수
   const pageChange = async (url:string) => {
     if (url) {
-      const { data } = await axios.get(url, {
+      const { data } = await Axios.get(url, {
         headers: {
           nickName: `${author}`,
         },
@@ -145,7 +144,7 @@ const UserPage = () => {
           );
         })}
       </div>
-      <UserInfoCompo user={user}/>
+      <UserInfoCompo />
       <div className="down-banner">
         <Pagination
           postPerPage={postPerPage}

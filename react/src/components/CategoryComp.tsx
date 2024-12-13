@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { CreateCategory } from "./CreateCategory.tsx";
 import { useNavigate } from "react-router-dom";
 import { useTypedSelector } from "../useTypedSelector.tsx";
 
-interface data {
+interface CategoryData {
   id:number,
   name:string,
-
 }
 
 
@@ -34,7 +33,7 @@ export const CategoryCompo = () => {
   return (
     <div className="board-tag">
       <div className="board-list">
-        {categoryList.map((data:data) => (
+        {categoryList.map((data:CategoryData) => (
           <CreateCategory
             key={data.id}
             boardName={data.name}
