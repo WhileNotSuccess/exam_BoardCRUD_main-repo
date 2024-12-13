@@ -70,17 +70,7 @@ const MainPage: React.FC = () => {
     
     localStorage.setItem("postPerPage", JSON.stringify(postPerPage)) // 로컬 스토리지 값 변경
     
-  }, [postPerPage]);
-
-  useEffect(() => {
-    
-    if (category === "조원소개" || category === "공지사항" || category === "현지학기제") {
-      // setHAnnounce(true);
-    } else {
-      localStorage.setItem("h_announce", JSON.stringify(h_announce)); 
-    }
-  }, [category, h_announce]); 
-  
+  }, [postPerPage]);  
 
   const pageChange = async (url: string) => { // 좌우 페이지 이동 버튼 클릭 시 게시글 이동동
     if (url) {

@@ -19,7 +19,7 @@ interface item {
 const UserPage = () => {
   const location = useLocation();
   const author = location.state;
-  const [userData, setUserData] = useState([]); // 작성글 또는 댓글 데이터를 저장
+  const [posts, setPosts] = useState([]); // 작성글 또는 댓글 데이터를 저장
   const [selectedTab, setSelectedTab] = useState("post"); // 탭 상태 ('post' 또는 'comment')
   const postPerPage = 10; // 페이지 당 글 수
   const [prevPage, setPrevPage] = useState(""); // 이전 페이지 URL
@@ -34,7 +34,7 @@ const UserPage = () => {
     const { data } = await Axios.get(
       `http://localhost:3012/posts/search?content=${author}&target=author&limit=${postPerPage}&page=${page}`
     );
-    setUserData(data.data);
+    setPosts(data.data);
     setPrevPage(data.prevPage);
     setNextPage(data.nextPage);
     setTotalPage(data.totalPage);
@@ -52,7 +52,7 @@ const UserPage = () => {
       // 값이 없다면 빈배열 처리(사용자가 댓글을 달지 않으면 헤더값이 없어서 오류가 나기에 오류를  빈배열 처리)
       const data = response.data || {};
       
-      setUserData(data.data || []);
+      setPosts(data.data || []);
       setPrevPage(data.prevPage || "");
       setNextPage(data.nextPage || "");
       setTotalPage(data.totalPage || 0);
@@ -60,7 +60,7 @@ const UserPage = () => {
       
     } catch (error) {
       // 에러 처리 (예: 네트워크 오류 등)
-      setUserData([]);
+      setPosts([]);
       setPrevPage("");
       setNextPage("");
       setTotalPage(0);
@@ -80,12 +80,8 @@ const UserPage = () => {
   // 페이지 이동을 위한 함수
   const pageChange = async (url:string) => {
     if (url) {
-      const { data } = await Axios.get(url, {
-        headers: {
-          nickName: `${author}`,
-        },
-      });
-      setUserData(data.data);
+      const { data } = await Axios.get(url);
+      setPosts(data.data);
       setPrevPage(data.prevPage);
       setNextPage(data.nextPage);
       setTotalPage(data.totalPage);
@@ -130,7 +126,7 @@ const UserPage = () => {
           <span className="info-date">작성일자</span>
         </div>
 
-        {userData.map((item:item) => {
+        {posts.map((item:item) => {
           const date = item.createdAt.substring(0, 10); // 날짜 포맷
           return (
             <div className="line-change" key={item.id}>

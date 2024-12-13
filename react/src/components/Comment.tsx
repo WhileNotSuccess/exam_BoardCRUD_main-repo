@@ -30,7 +30,6 @@ const Comment: React.FC<CommentProps> = ({
 }) => {
   const [NestedComments, setNestedComments] = useState<NestedComment[]>(); // 대댓글 저장을 위한 state
   const [content, sContent] = useState<string>(""); // 댓글 수정을 위한 state
-  // const [render, setRender] = useState<boolean>(false); // 대댓글 변화시 렌더링을 위한 state
   const [nestedAppear, setNestedAppear] = useState<boolean>(false); // 대댓글 작성 창을 띄우기위한 state
   const [commentRemakeAppear, setCommentRemakeAppear] = useState<boolean>(false); // 댓글 수정 창을 띄우기위한 state
   const [NestedHide, setNestedHide] = useState<boolean>(false); // 대댓글을 안보이게 하는 state
@@ -79,7 +78,7 @@ const Comment: React.FC<CommentProps> = ({
     setNestedAppear(false);
     setRender(!render)
   };
-
+  
   return (
     <div className="comment">
       <div className="incomment">

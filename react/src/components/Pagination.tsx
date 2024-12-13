@@ -40,7 +40,7 @@ export const Pagination : React.FC<props> = ({
         className="arrow-button"
         onClick={(e) => {
           e.preventDefault();
-          pageChange(prevPage ? `${prevPage}&limit=${postPerPage}` : "");
+          pageChange(prevPage ? `${prevPage}` : "");
         }}
         disabled={!prevPage}
       >
@@ -50,8 +50,7 @@ export const Pagination : React.FC<props> = ({
         {pageNumbers.map((number) => (
           <li key={number} className={currentPage === number ? "active" : ""}>
             <a
-              onClick={(e) => {
-                e.preventDefault();
+              onClick={() => {
                 paginate(number);
               }}
             >
@@ -62,9 +61,9 @@ export const Pagination : React.FC<props> = ({
       </ul>
       <button
         className="arrow-button"
-        onClick={(e) => {
-          e.preventDefault();
-          pageChange(nextPage ? `${nextPage}&limit=${postPerPage}` : "");
+        onClick={() => {
+          
+          pageChange(nextPage ? `${nextPage}` : "");
         }}
         disabled={!nextPage}
       >

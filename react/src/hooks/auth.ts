@@ -17,7 +17,9 @@ export const useAuth = () => {
         Axios
             .get('http://localhost:3012/user/info')
             .then(res => res.data)
-            
+        ,  {
+            refreshInterval: 60000 * 5 // 5분마다 요청
+          }    
     )
 
     const logout = async () => {
@@ -27,6 +29,7 @@ export const useAuth = () => {
 
     return {
         user,
+        error,
         logout,
         isLoading,
     }

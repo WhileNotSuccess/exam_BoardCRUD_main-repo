@@ -62,7 +62,7 @@ const Post: React.FC = () => {
       alert("로그인 후 이용해주세요");
       navigate("/");
     }
-  }, [user, isLoading, navigate]);
+  }, [user, isLoading]);
 
 
   const adapter = (editorInstance: any) => {
@@ -89,6 +89,12 @@ const Post: React.FC = () => {
   };
 
   const onclick = async (boardName: string) => {
+    if (title === "" || content === ""){
+      // 사용자가 제목이나 내용을 입력하지 않았을시 실행되는 에러 구문
+      alert("내용을 입력해주세요")
+      return
+    }
+    
     // 게시판이름을 기준으로 글을 업로드 하는 함수
     console.log(boardName)
     try {
@@ -107,9 +113,8 @@ const Post: React.FC = () => {
       console.log("성공했습니다", res.data);
       navigate("/");
     } catch (error) {
-      // 사용자가 제목이나 내용을 입력하지 않았을시 실행되는 에러 구문
-      if (title === "") alert("제목을 입력해주세요");
-      if (content === "") alert("내용을 입력해주세요");
+      
+      
       console.error("실패했습니다", error);
     }
   };

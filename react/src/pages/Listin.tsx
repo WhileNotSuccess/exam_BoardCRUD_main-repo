@@ -30,7 +30,6 @@ const ListIn = () => {
   const [content, setContent] = useState<string>(""); // 댓글 작성시 input창의 state
   const [render, setRender] = useState<boolean>(false); // 렌더링 state
   const [comment, setComment] = useState<CommentData[]>([]); // 게시글에 달린 댓글
-  // const [listcon, sListcon] = useState<string>(""); // html 파서를 위한 게시글 내용(html parser에서 post.content를 쓰면 오류-first argument must be string)
   const [commentId, setCommentId] = useState<number>(0); // 댓글 아이디
   const [loading, setLoading] = useState<boolean>(true); // 로딩중임을 나타내는 state --시작시 true로 loading 중, useEffect안에서 false로 변경하면 state 변경으로 렌더링
   const [error, setError] = useState<string>(""); // 에러임을 나타내는 state --시작시 공백(false)로 useEffect안에서 axios로 받아오는 중 error시 에러안에 글자열 저장(true)로 error표시
