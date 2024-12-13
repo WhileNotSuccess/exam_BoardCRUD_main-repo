@@ -20,7 +20,6 @@ import * as winston from 'winston'
 import { WinstonModule } from 'nest-winston';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/http-exception.filter';
-import { Admin } from './user/entities/admin.entity';
 
 @Module({
   imports: [
@@ -34,46 +33,46 @@ import { Admin } from './user/entities/admin.entity';
         username:config.get<string>('DB_USERNAME'),
         password:config.get<string>('DB_PASSWORD'),
         database:config.get<string>('DB_DATABASE'),
-        entities:[User, Comment,Category,Post, NestedComment, Admin],
+        entities:[User, Comment,Category,Post, NestedComment],
         synchronize:false
       })
     }),
-    // WinstonModule.forRoot({
+    WinstonModule.forRoot({
 
-    //   transports:[
-    //     new winston.transports.Console({
-    //       level: 'silly' ,
-    //       format: winston.format.combine(
-    //         winston.format.colorize(),
-    //         winston.format.timestamp(),
-    //         winston.format.printf(({ timestamp, level, message })=>{
-    //           return `${timestamp} [${level}]: ${message}`;
-    //         })
-    //       )
-    //     }),
-    //     new winston.transports.File({
-    //       filename: 'exam_BoardCRUD.log',
-    //       level: 'warn',
-    //       format: winston.format.combine(
-    //         winston.format.timestamp(),
-    //         winston.format.printf(({ timestamp, level, message }) => {
-    //           return `${timestamp} [${level}]: ${message}`;
-    //       })
-    //     )
-    //     })
-    //   ]
+      transports:[
+        new winston.transports.Console({
+          level: 'silly' ,
+          format: winston.format.combine(
+            winston.format.colorize(),
+            winston.format.timestamp(),
+            winston.format.printf(({ timestamp, level, message })=>{
+              return `${timestamp} [${level}]: ${message}`;
+            })
+          )
+        }),
+        new winston.transports.File({
+          filename: 'exam_BoardCRUD.log',
+          level: 'warn',
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.printf(({ timestamp, level, message }) => {
+              return `${timestamp} [${level}]: ${message}`;
+          })
+        )
+        })
+      ]
 
-    // }),
+    }),
     ConfigModule.forRoot({
     isGlobal: true,
   }), 
   AuthModule, UserModule, CommentsModule,S3Module, PostModule, CategoryModule,NestedCommentModule],
   controllers: [AppController],
   providers: [AppService,
-  //   {
-  //   provide: APP_FILTER,
-  //   useClass: HttpExceptionFilter
-  // }
+    {
+    provide: APP_FILTER,
+    useClass: HttpExceptionFilter
+    }
 ],
 })
 export class AppModule {}

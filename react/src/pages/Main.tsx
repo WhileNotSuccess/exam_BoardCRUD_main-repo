@@ -36,7 +36,6 @@ const MainPage: React.FC = () => {
     return saved ? JSON.parse(saved) : true;
   });
   const [notion, setNotion] = useState<Posts[]>([]);    // 공지사항 리스트 (가장 최신 글 2개만 가져옴)
-
   const category = useTypedSelector((state) => state.category);
   const navigate = useNavigate();
 
@@ -76,7 +75,7 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     
     if (category === "조원소개" || category === "공지사항" || category === "현지학기제") {
-      setHAnnounce(true);
+      // setHAnnounce(true);
     } else {
       localStorage.setItem("h_announce", JSON.stringify(h_announce)); 
     }
@@ -139,7 +138,7 @@ const MainPage: React.FC = () => {
           <span className="post-date">작성일자</span>
         </div>
         }
-        {notion.length > 0 && !h_announce && <PostList list={notion} />}
+        {notion.length > 0 && !h_announce && category==='자유게시판' && <PostList list={notion} />}
         {posts.length > 0 && <PostList list={posts} />}
 
         <div className="post-btn-container">

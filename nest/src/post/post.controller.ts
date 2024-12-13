@@ -4,9 +4,7 @@ import { postDTO } from "./dto/post.dto";
 import { PaginationDTO } from "./dto/pagination.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiProperty, ApiPropertyOptional, ApiQuery, ApiResponse, ApiTags, ApiUnauthorizedResponse } from "@nestjs/swagger";
-import { http } from "winston";
 import { SearchDTO } from "./dto/search.dto";
-import { AdminGuard } from "src/user/user.admin.guard";
 
 @ApiTags('posts')
 @Controller('posts')
@@ -44,9 +42,9 @@ export class PostController {
         }
     })
     @Get()
-    findAll(@Query() query: PaginationDTO) {
+    async findAll(@Query() query: PaginationDTO) {
         
-        return this.postService.findPostAll({
+        return await this.postService.findPostAll({
             page: query.page ?? 1,
             limit: query.limit ?? 10,
             category: query.category ?? '자유게시판'
@@ -92,7 +90,7 @@ export class PostController {
         required: false
     })
     @Get('search')
-    search(@Query() query: SearchDTO) {
+    async search(@Query() query: SearchDTO) {
         const searchProps = {
             category: query.category ?? '%',
             content: query.content,
@@ -100,7 +98,7 @@ export class PostController {
             limit: query.limit ?? 10,
             page: query.page ?? 1
         };
-        return this.postService.findPostSearch(searchProps);
+        return await this.postService.findPostSearch(searchProps);
     }
 
     @ApiOperation({ summary: '게시글 상세보기' })
@@ -117,8 +115,8 @@ export class PostController {
         }
     })
     @Get(':id')
-    findOne(@Param('id') id: number) {
-        return this.postService.findPostById(id);
+    async findOne(@Param('id') id: number) {
+        return await this.postService.findPostById(id);
     }
 
     @ApiOperation({ summary: '게시글 삭제' })
@@ -126,8 +124,8 @@ export class PostController {
     @ApiUnauthorizedResponse({ description: 'unauthorized' })
     @UseGuards(AuthGuard('jwt'))
     @Delete(':id')
-    deleteOne(@Param('id') id: number, @Req() req: any) {
-        return this.postService.deletePost(id, req.user.name);
+    async deleteOne(@Param('id') id: number, @Req() req: any) {
+        return await this.postService.deletePost(id, req.user.name);
     }
 
     @ApiOperation({ summary: '게시글 등록' })
@@ -135,8 +133,8 @@ export class PostController {
     @ApiUnauthorizedResponse({ description: 'unauthorized' })
     @UseGuards(AuthGuard('jwt'))
     @Post()
-    createPost(@Body() body: postDTO, @Req() req: any) {
-        return this.postService.uploadPost(body, req.user.name);
+    async createPost(@Body() body: postDTO, @Req() req: any) {
+        return await this.postService.uploadPost(body, req.user.name);
     }
 
     @ApiOperation({ summary: '게시글 수정' })
@@ -144,7 +142,7 @@ export class PostController {
     @ApiUnauthorizedResponse({ description: 'unauthorized' })
     @UseGuards(AuthGuard('jwt'))
     @Put(':id')
-    updatePost(@Param('id') id: number, @Body() body: postDTO, @Req() req: any) {
-        return this.postService.updatePost(id, body, req.user.name);
+    async updatePost(@Param('id') id: number, @Body() body: postDTO, @Req() req: any) {
+        return await this.postService.updatePost(id, body, req.user.name);
     }
 }

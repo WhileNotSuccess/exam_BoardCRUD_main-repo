@@ -19,30 +19,32 @@ export class NestedCommentController {
 
   @Get()
   async getAll(@Query('comment-id') commentId : number) {
+    
     return {
       data: await this.nestedCommentService.findAll(commentId)
     }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: number) {
     return {
-      data: this.nestedCommentService.findOne(id)
+      data: await this.nestedCommentService.findOne(id)
     }
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateNestedCommentDto: UpdateNestedCommentDto) {
+  async update(@Param('id') id: number, @Body() updateNestedCommentDto: UpdateNestedCommentDto, @Req() request) {
+    
     return {
-      data: this.nestedCommentService.update(id, updateNestedCommentDto)
+      data: await this.nestedCommentService.update(id, updateNestedCommentDto, request.user.name)
     }
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number, @Req() request) {
     return {
-      data: this.nestedCommentService.remove(id)
+      data: await this.nestedCommentService.remove(id, request.user.name)
     }
   }
 }

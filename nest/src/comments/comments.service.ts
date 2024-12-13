@@ -15,14 +15,14 @@ export class CommentsService {
   constructor(private readonly dataSource : DataSource, private readonly nestedCommentService : NestedCommentService){}
   
 
-  async create(createCommentDto: CreateCommentDto, req:string) {
+  async create(createCommentDto: CreateCommentDto, name:string) {
     const queryRunner = this.dataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
     try{
-      const queryRunnerA =  queryRunner.manager.create(Comment,createCommentDto) // Comment엔티티의 열 모두 가져옴
-      queryRunnerA.author = req //이때의 author는 원래 null이었음
-      await queryRunner.manager.save(queryRunnerA)
+      const newComment =  queryRunner.manager.create(Comment,createCommentDto) // Comment엔티티의 열 모두 가져옴
+      newComment.author = name //이때의 author는 원래 null이었음
+      await queryRunner.manager.save(newComment)
       await queryRunner.commitTransaction()
       return{
         message : "추가 성공했어요"
@@ -43,13 +43,14 @@ export class CommentsService {
       data: await this.dataSource.manager.findBy(Comment,{postId:postId})
     }
   }
-  async update(id: number, updateCommentDto: UpdateCommentDto, req:string) {
+  async update(id: number, updateCommentDto: UpdateCommentDto, name:string) {
     
-    const queryRunner = this.dataSource.createQueryRunner()
-    const commentAuthor = await queryRunner.manager.findOne(Comment,{where:{id}})
-      if (commentAuthor.author !== req){
+    
+    const commentAuthor = await this.dataSource.manager.findOne(Comment,{where:{id}})
+      if (commentAuthor.author !== name){
         throw new ForbiddenException()
       }
+    const queryRunner = this.dataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
     try{
@@ -71,8 +72,9 @@ export class CommentsService {
     
     const commentAuthor = await this.dataSource.manager.findOne(Comment,{where:{id}})
       if (commentAuthor.author !== req){
-        throw new ForbiddenException() // 403번에러 권한이 없음
+        throw new ForbiddenException('작성자가 아닙니다.') // 403번에러 권한이 없음
       }
+      
     const a = await this.dataSource.manager.findBy(NestedComment,{commentId:id})
     const queryRunner = this.dataSource.createQueryRunner()
     await queryRunner.connect()
@@ -95,19 +97,25 @@ export class CommentsService {
     }
   }
   async getUserComment(limit:number,page:number,author:string){
-    const content2=await this.dataSource.createQueryBuilder()
+    const content=await this.dataSource.createQueryBuilder()
     .select('comment.postId').from(Comment,'comment').where({author:author})
     .getMany()
+
     const newArray=[]
-    content2.forEach(item=>newArray.push(item.postId))
-    console.log('array',newArray)
-    const [returnPost,total3]=await this.dataSource.createQueryBuilder()
-    .select('post').from(Post,'post').where(
-      'id IN :array',{array:[newArray]}
-    ).skip((page-1)*limit)
-    .getManyAndCount()
-    console.log('return',returnPost)
-    const totalPage=Math.ceil(total3/limit)
+
+    content.forEach(item=>newArray.push(item.postId))
+
+    const [returnPost, total] = await this.dataSource.createQueryBuilder()
+    .select('post')
+    .from(Post, 'post')
+    .where('post.id IN (:...array)', { array: newArray }) 
+    .skip((page - 1) * limit)
+    .take(limit)
+    .orderBy('post.createdAt', 'DESC') 
+    .getManyAndCount();
+  
+    
+    const totalPage=Math.ceil(total/limit)
     const currentPage=page
     const nextPage=totalPage-currentPage?`http://localhost:3012/posts?page=${currentPage+1}`:null
     const prevPage=currentPage-1?`http://localhost:3012/posts?page=${currentPage-1}`:null

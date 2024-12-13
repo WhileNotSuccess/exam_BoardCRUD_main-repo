@@ -5,7 +5,7 @@ import { MemoryStoredFile } from 'nestjs-form-data';
 import * as uuid from 'uuid'
 @Injectable()
 export class S3Service {
-    private s3: AWS.S3;
+  private s3: AWS.S3;
   private bucketName:string;
 
   constructor(private configService: ConfigService) {

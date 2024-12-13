@@ -24,7 +24,7 @@ export class PostService{
     }
   
     async findPostSearch(body: SearchDTO) {
-    
+ 
         const findArray: string[] = body.content.split(' ').filter(value => value !== '') 
             .map(element => `%${element}%`);
         
@@ -72,9 +72,10 @@ export class PostService{
         return search?{data:search,totalPage,currentPage,nextPage,prevPage}:null
     }
     async deletePost(id:number,user:string){
+        
         const post= await this.dataSource.manager.findOneBy(Post,{id:id})
         if(user!=post.author){
-            throw new ForbiddenException()
+            throw new ForbiddenException('작성자가 아닙니다.')
         }
         const commentsIds=await this.dataSource.createQueryBuilder()
         .select('Comment.id').from(Comment,'Comment').where('postId = :id',{id:id}).getMany()

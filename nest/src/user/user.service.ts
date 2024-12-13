@@ -10,7 +10,7 @@ export class UserService {
     private readonly dataSource:DataSource
   ){}
   async findUserById(id:number){
-    return this.dataSource.manager.findBy(User,{id:id})
+    return await this.dataSource.manager.findBy(User,{id:id})
   }
   async createNewUser(createUserDto: CreateUserDto) {
     const queryRunner = await this.dataSource.createQueryRunner()

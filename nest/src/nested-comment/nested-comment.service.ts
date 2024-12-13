@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateNestedCommentDto } from './dto/create-nested-comment.dto';
 import { UpdateNestedCommentDto } from './dto/update-nested-comment.dto';
 import { NestedComment } from './entities/nested-comment.entity';
@@ -9,7 +9,7 @@ export class NestedCommentService {
   constructor(private readonly dataSource: DataSource) {}
 
 
-  async create(createNestedCommentDto: CreateNestedCommentDto,req:string) {
+  async create(createNestedCommentDto: CreateNestedCommentDto,name:string) {
     
     const queryRunner = this.dataSource.createQueryRunner();
 
@@ -18,7 +18,7 @@ export class NestedCommentService {
     
     try {
       const comment = queryRunner.manager.create(NestedComment, createNestedCommentDto);
-      comment.author = req
+      comment.author = name
       await queryRunner.manager.save(comment);
       await queryRunner.commitTransaction();
       return { message: '대댓글 추가를 성공했습니다' };
@@ -39,15 +39,18 @@ export class NestedCommentService {
     return await this.dataSource.manager.findOneBy(NestedComment, { id: id });
   }
 
-  async update(id: number, updateNestedCommentDto: UpdateNestedCommentDto) {
-
+  async update(id: number, updateNestedCommentDto: UpdateNestedCommentDto, name:string) {
+    const target = await this.dataSource.manager.findOneBy(NestedComment,{id})
+    if(target.author !== name){
+      throw new ForbiddenException('댓글의 작성자가 아닙니다.')
+    }
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      
+
 
       await queryRunner.manager.update(NestedComment, id, updateNestedCommentDto);
       await queryRunner.commitTransaction();
@@ -61,8 +64,11 @@ export class NestedCommentService {
     }
   }
 
-  async remove(id: number) {
-
+  async remove(id: number, name:string) {
+    const target = await this.dataSource.manager.findOneBy(NestedComment,{id})
+    if(target.author !== name){
+      throw new ForbiddenException('댓글의 작성자가 아닙니다.')
+    }
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
@@ -83,7 +89,7 @@ export class NestedCommentService {
 
   async LHsremove(id: number[]) { // 배열을 받고 조건은 id in 배열
 
-    const real = await this.dataSource.createQueryBuilder().from(NestedComment, "nestedComment").delete().whereInIds(id).execute()
+    await this.dataSource.createQueryBuilder().from(NestedComment, "nestedComment").delete().whereInIds(id).execute()
     
   }
 }

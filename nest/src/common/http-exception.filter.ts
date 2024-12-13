@@ -10,7 +10,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
   ){}
 
   catch(exception: Error, host: ArgumentsHost) {
+    
     const ctx = host.switchToHttp()
+    
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>()
 
@@ -19,7 +21,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     const response = (exception as HttpException).getResponse();
-    
+    console.log(response)
     const log = {
         timestamp: new Date(),
         message: typeof response === 'object' ? `url:${req.url}, ${response['message']}` : `url:${req.url}, ${response}`

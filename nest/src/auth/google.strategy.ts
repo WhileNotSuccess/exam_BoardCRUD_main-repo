@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
+import { request } from 'http';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') { // 이 자체가 구글전략을 만드는거고 여러가지 인증방식을 각각 하나의 Strategy라고 부름
@@ -25,6 +26,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') { // �
     profile: Profile, 
     done: VerifyCallback,
   ) {
+    
     const user = await this.authService.validateUser({  // 구글에서 가져온 정보로 사용자를 찾거나 생성함
         googleId:profile.id,
         name:profile.displayName,
@@ -33,6 +35,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') { // �
     if(!user){
         throw new InternalServerErrorException('유저 데이터베이스 관련 오류') // 유저가 없을수가 없음 원래 DB에 유저가 없으면 그대로 생성하니까 
     }
+    
     done(null, user);  // 이 문장이 실행되야 request.user(사용자 정보)를 할수 있음, done함수는 error와 user, info(선택사항)을 인자로 받는다.
     // error에 null을 주면 에러가 없다라는 뜻, user는 인증이 성공했을때 request.user에 할당해준다
     // 인증과정에서 에러가 뜨면 error에 new error를 전달

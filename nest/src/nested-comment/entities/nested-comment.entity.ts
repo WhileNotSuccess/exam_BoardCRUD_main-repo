@@ -20,7 +20,7 @@ export class NestedComment {
   content:string
 
   @CreateDateColumn()
-    createdAt : string
+  createdAt : string
   
   @UpdateDateColumn()
   updatedAt : string
