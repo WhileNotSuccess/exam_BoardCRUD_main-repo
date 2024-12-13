@@ -159,7 +159,7 @@ const PostUpdate: React.FC = () => {
       </div>
 
       <div>
-        {/* <UserInfoCompo user={user} /> */}
+        <UserInfoCompo />
       </div>
     </div>
   );
