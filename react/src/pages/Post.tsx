@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useAuth } from "../hooks/auth";
+import { useTypedSelector } from "../useTypedSelector";
 
 // CKEditor에서 사용할 이미지 업로드 어댑터 클래스
 class MyUploadAdapter {
@@ -38,23 +39,31 @@ class MyUploadAdapter {
   }
 }
 
+interface Category {
+  id: number;
+  name: string;
+}
+
 // 게시글 작성 컴포넌트
 const Post: React.FC = () => {
   // react.fc는 post가 함수형 컴포넌트임을 타입스크립트가 인지할수 있도록
-  const [boardName, setBoardName] = useState<string>("자유게시판"); // 카테고리 이름
+  const [boardName, setBoardName] = useState<string>("공지사항"); // 카테고리 이름이 담길 변수
   const [title, setTitle] = useState<string>(""); // 사용자가 작성한 제목
   const [content, setContent] = useState<string>(""); // 사용자가 작성한 내용
+  const categoryList = useTypedSelector((state)=>state.categoryList) as Category[]
 
   const navigate = useNavigate(); // 페이지 이동이 필요할 때 사용
   const { user, isLoading } = useAuth(); // 로그인한 유저의 정보 및 기다림을 위함
 
   useEffect(() => {
+    console.log(boardName)
     // post페이지에 처음 왔을때 사용자가 로그인 하지 않으면 메인페이지로 이동시키는 함수
     if (!isLoading && !user) {
       alert("로그인 후 이용해주세요");
       navigate("/");
     }
   }, [user, isLoading, navigate]);
+
 
   const adapter = (editorInstance: any) => {
     
@@ -81,6 +90,7 @@ const Post: React.FC = () => {
 
   const onclick = async (boardName: string) => {
     // 게시판이름을 기준으로 글을 업로드 하는 함수
+    console.log(boardName)
     try {
       const res = await Axios.post(
         `http://localhost:3012/posts?category=${boardName}`,
@@ -114,10 +124,11 @@ const Post: React.FC = () => {
             onChange={(e) => setBoardName(e.target.value)}
             className="board-select"
           >
-            <option value="자유게시판">자유게시판</option>
-            <option value="공지사항">공지사항</option>
-            <option value="축제게시판">축제게시판</option>
-            <option value="조원소개">조원소개</option>
+            {categoryList.map((category) => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
           </select>
           <input placeholder="제목" onChange={titlechange} />
         </div>

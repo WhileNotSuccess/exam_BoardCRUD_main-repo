@@ -9,6 +9,7 @@ import PostList from "../components/PostList.tsx";
 import DownSearch from "../components/DownSearch.tsx";
 import { useTypedSelector } from "../useTypedSelector.tsx";
 
+
 interface Posts {   // 불러온 게시글의 인터페이스스
   id: number;
   title: string;
@@ -89,6 +90,7 @@ const MainPage: React.FC = () => {
   };
 
   return (
+    <div className='out-container'>
     <div className="container">
       <CategoryCompo />
       <div className="post-list">
@@ -138,8 +140,9 @@ const MainPage: React.FC = () => {
 
       <UserInfoCompo />
       <DownSearch />
-      <div className="down-banner">
-        <Pagination
+    </div>
+    <div className="down-banner"> 
+        <Pagination // 백엔드 페이지네이션 추가 시 사용 예정
           postPerPage={postPerPage}
           totalPage={totalPage}
           paginate={paginate}
@@ -152,6 +155,7 @@ const MainPage: React.FC = () => {
     </div>
   );
 };
+
 
 export default MainPage;
 

@@ -18,22 +18,22 @@ import { useAuth } from "../hooks/auth";
 
 
 const UserInfoCompo : React.FC = () => {
-  const {user} = useAuth()
-  
+  const {user, logout} = useAuth()
+  const baseUrl = import.meta.env.VITE_BACKEND_URL
   return (
     <div className="user-info">
       {user ? (
         <>
           <div className="user-login">{user.name}</div>
-          <Link to="/login" className="logout-btn">
-            로그아웃
-          </Link>
+        <button onClick={logout} className="logout-btn">
+          로그아웃
+        </button>
         </>
       ) : (
         <>
-          <Link to="/login" className="user-login">
-            로그인
-          </Link>
+      <a href={`${baseUrl}/auth/google/login`}>
+        <img src="./images/web_neutral_rd_ctn.svg" className='google-logo'/>
+      </a>
           <Link to="/sign-in" className="logout-btn">
             회원가입
           </Link>

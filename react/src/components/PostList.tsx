@@ -59,14 +59,15 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
     }
   };
 
-  useEffect(() => { setPosts(list); }, [list]); // 카테고리가 변경되면 내용도 변경되서 Effect로 실시간 변경
+  useEffect(() => { setPosts(list);
+   }, [list]); // 카테고리가 변경되면 내용도 변경되서 Effect로 실시간 변경
   
   return (
     <>
       {posts.map((item: List) => {
         const date = item.createdAt.substring(0, 10);
         const user = item.author;
-        return category === "조원소개" ? (        // 조원소개 페이지일땐 다른 디자인으로 div 띄우기
+        return (category === "조원소개" ? (        // 조원소개 페이지일땐 다른 디자인으로 div 띄우기
           <div className="memberBox" key={item.id}>
             <div className="member">
               <div className="memberTitle">{item.title}</div>
@@ -81,19 +82,20 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
           </div>
         ) : (   // 조원소개 이외에는 게시글 형태로 클릭 시 listin 이동
           <div className="line-change" key={item.id} onClick={closeMenu}>   
-              <span onClick={() => navig(`/post/${item.id}`)}>
+              <div className="title-value" onClick={() => navig(`/post/${item.id}`)}>
                 [{item.category}] {item.title}
-              </span>
+              </div>
             
-            <span
+            <div
               className="user-value"
               onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => rightClick(e, item.author)}
               style={{ display: "inline-block" }}
             >
               {user}
-            </span>
-            <span className="post-date">{date}</span>
+              </div>
+            <div className="post-date">{date}</div>
           </div>
+        )
         );
       })}
       {user && (
