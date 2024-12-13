@@ -21,10 +21,10 @@ export class Comment {
   content : string
 
   @CreateDateColumn()
-  createAt : string
+  createdAt : string
 
   @UpdateDateColumn()
-  updateAt : string
+  updatedAt : string
 
   @OneToMany(() => NestedComment, nestedComment => nestedComment.comment)
   nestedComments: NestedComment[];

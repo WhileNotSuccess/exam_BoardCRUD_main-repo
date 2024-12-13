@@ -28,7 +28,7 @@ const UserPage = () => {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
 
   const navig = useNavigate();
-  const {user} = useAuth();
+
   // 작성글 데이터를 가져오는 함수
   const postData = async (page:number) => {
     const { data } = await Axios.get(
@@ -45,21 +45,19 @@ const UserPage = () => {
   const commentData = async (page:number) => {
     try {
       const response = await Axios.get(
-        `http://localhost:3012/find-post-by-comment?limit=10&page=${page}`,
-        {
-          headers: {
-            nickName: `${author}`,
-          },
-        }
+        `http://localhost:3012/comments/search?content=${author}&limit=10&page=${page}`,
+        
       );
       // 댓글의 값이 들어온다면 정상적으로 띄우고
       // 값이 없다면 빈배열 처리(사용자가 댓글을 달지 않으면 헤더값이 없어서 오류가 나기에 오류를  빈배열 처리)
       const data = response.data || {};
+      
       setUserData(data.data || []);
       setPrevPage(data.prevPage || "");
       setNextPage(data.nextPage || "");
       setTotalPage(data.totalPage || 0);
       setCurrentPage(data.currentPage || 1); // currentPage 업데이트
+      
     } catch (error) {
       // 에러 처리 (예: 네트워크 오류 등)
       setUserData([]);
@@ -136,7 +134,7 @@ const UserPage = () => {
           const date = item.createdAt.substring(0, 10); // 날짜 포맷
           return (
             <div className="line-change" key={item.id}>
-              <span onClick={() => navig(`/list-in/${item.id}`)}>
+              <span onClick={() => navig(`/post/${item.id}`)}>
                 [{item.category}] {item.title}
               </span>
               <span className="post-date">{date}</span>

@@ -9,7 +9,7 @@ export class Post{ //Post 테이블
     id:number;
     @Column()
     title:string;
-    @Column()
+    @Column("longtext")
     content:string;
     @Column()
     author:string;

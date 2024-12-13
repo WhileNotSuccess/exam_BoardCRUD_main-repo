@@ -22,8 +22,10 @@ export class CommentsController {
   }
 
   @Get('search')
-  async getUser(@Query('limit') limit:number,@Query('page') page:number, @Headers() header){
-    return this.commentsService.getUserComment(limit??10,page??1,header.nickName)
+  async getUser(@Query('limit') limit:number,@Query('page') page:number, @Query('content') header:string){
+    console.log(header)
+    const name=header.replace('%20',' ')
+    return this.commentsService.getUserComment(limit??10,page??1,name)
   }
 
   @UseGuards(AuthGuard('jwt'))
