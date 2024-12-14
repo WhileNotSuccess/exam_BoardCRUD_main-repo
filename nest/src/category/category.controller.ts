@@ -12,7 +12,7 @@ export class CategoryController {
     @ApiOperation({ summary: 'Request all categories' })
     @ApiOkResponse({ description: 'Successfully retrieved all categories' })
     async getCategory() {
-        return {data:await this.service.getCategory()} 
+        return await this.service.getCategory()
         
     }
 }

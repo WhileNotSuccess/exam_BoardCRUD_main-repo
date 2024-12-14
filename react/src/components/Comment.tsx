@@ -29,7 +29,7 @@ const Comment: React.FC<CommentProps> = ({
   setCommentId,
 }) => {
   const [NestedComments, setNestedComments] = useState<NestedComment[]>(); // 대댓글 저장을 위한 state
-  const [content, sContent] = useState<string>(""); // 댓글 수정을 위한 state
+  const [content, setContent] = useState<string>(""); // 댓글 수정을 위한 state
   const [nestedAppear, setNestedAppear] = useState<boolean>(false); // 대댓글 작성 창을 띄우기위한 state
   const [commentRemakeAppear, setCommentRemakeAppear] = useState<boolean>(false); // 댓글 수정 창을 띄우기위한 state
   const [NestedHide, setNestedHide] = useState<boolean>(false); // 대댓글을 안보이게 하는 state
@@ -47,30 +47,30 @@ const Comment: React.FC<CommentProps> = ({
   useEffect(() => {
     getNestedComment();
   }, [data, render]);
-  //form 태그의 작
-  const configer = (e: FormEvent) => {
+  //form 태그의 작성이 댓글 수정인지 재댓글 생성인지 확인후 해당 함수 호출
+  const confirmForm = (e: FormEvent) => {
     e.preventDefault();
     if (nestedAppear) {
-      nComment();
+      nestedCommentPost();
     } else if (commentRemakeAppear) {
-      remake();
+      remakeComment();
     }
-    sContent("");
+    setContent("");
   };
-  const deleter = async () => {
+  const deletePost = async () => {
     await Axios.delete(`http://localhost:3012/comments/${data.id}`).catch(
       (e) => console.log(e)
     );
     setRender(!render);
   };
-  const remake = async () => {
+  const remakeComment = async () => {
     await Axios.put(`http://localhost:3012/comments/${data.id}`, {
       content: content,
     }).catch((e) => console.log(e));
     setCommentRemakeAppear(false);
     setRender(!render)
   };
-  const nComment = async () => {
+  const nestedCommentPost = async () => {
     await Axios.post(`http://localhost:3012/nested-comments`, {
       commentId: `${data.id}`,
       content: content,
@@ -91,11 +91,11 @@ const Comment: React.FC<CommentProps> = ({
           <div className="button">
             {/*nestedAppear(대댓글작성),commentRemakeAppear(댓글 수정) 어느쪽이 하나라도 true이고 commentId와 댓글의 id가 일치할경우 form으로 전환*/}
             {nestedAppear || (commentRemakeAppear && commentId === data.id) ? (
-              <form onSubmit={configer}>
+              <form onSubmit={confirmForm}>
                 <input
                   type="text"
                   value={content}
-                  onChange={(e) => sContent(e.target.value)}
+                  onChange={(e) => setContent(e.target.value)}
                 />
                 <button>작성</button>
               </form>
@@ -103,7 +103,7 @@ const Comment: React.FC<CommentProps> = ({
               <>
                 {/*click시 commentId에 댓글 아이디 저장, nestedAppear false=>true*/}
                 {user?<>
-                  <button
+                <button
                   onClick={() => {
                     setCommentId(data.id);
                     setNestedAppear(!nestedAppear);
@@ -122,8 +122,8 @@ const Comment: React.FC<CommentProps> = ({
                     >
                       수정
                     </button>
-                    {/*deleter 호출 */}
-                    <button onClick={deleter}>삭제</button>
+                    {/*deletePost 호출 */}
+                    <button onClick={deletePost}>삭제</button>
                   </>
                 ) : null}
                 </>:null}

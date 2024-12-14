@@ -18,7 +18,7 @@ export const CategoryCompo = () => {
   const fetchCategories = async () => {
     const { data } = await axios.get("http://localhost:3012/category");
     
-    dispatch({ type: "CATEGORYLIST_UPLOAD", payload: data.data.data});
+    dispatch({ type: "CATEGORYLIST_UPLOAD", payload: data.data});
   };
 
   useEffect(() => {
