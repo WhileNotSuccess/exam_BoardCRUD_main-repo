@@ -76,19 +76,19 @@ export class PostService{
         if(user!=post.author){
             throw new ForbiddenException('작성자가 아닙니다.')
         }
+
         const commentsIds=await this.dataSource.createQueryBuilder()
-        .select('Comment.id').from(Comment,'Comment').where('Comment.postId = :id',{id:id}).getMany()
+        .select('Comment.id').from(Comment,'Comment').where('Comment.postId = :target',{target:id}).getMany()
         const commentArray=commentsIds.map(item=>item.id)
+
         const queryRunner=this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            await Promise.all(
-                await this.commentService.removeByPost(commentArray)
-            )
+            await this.commentService.removeByPost(commentArray)
             await queryRunner.manager.delete(Post,id)
             await queryRunner.commitTransaction()
-            return 'finished delete'
+            return {message:'finished delete'}
         } catch (e) {
             await queryRunner.rollbackTransaction()
             throw new BadRequestException(`${e.sqlMessage}`)
@@ -108,7 +108,7 @@ export class PostService{
         try {
             await queryRunner.manager.update(Post,id,body)
             await queryRunner.commitTransaction()
-            return 'finished update'
+            return {message:'finished update'}
         } catch (e) {
             await queryRunner.rollbackTransaction()
             throw new BadRequestException(`${e.sqlMessage}`)
@@ -124,7 +124,7 @@ export class PostService{
             const postContent={...body,author:user}
             await queryRunner.manager.save(Post,postContent)
             await queryRunner.commitTransaction()
-            return 'finished upload'
+            return {message:'finished upload'}
         } catch (e) {
             await queryRunner.rollbackTransaction()
             throw new BadRequestException(`${e.sqlMessage}`)

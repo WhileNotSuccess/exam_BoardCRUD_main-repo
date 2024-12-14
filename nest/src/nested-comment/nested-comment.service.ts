@@ -87,6 +87,5 @@ export class NestedCommentService {
 
   async LHsremove(id: number[]) { // 배열을 받고 조건은 id in 배열
     await this.dataSource.createQueryBuilder().from(NestedComment, "nestedComment").delete().whereInIds(id).execute()
-    return '삭제 완료'
   }
 }
