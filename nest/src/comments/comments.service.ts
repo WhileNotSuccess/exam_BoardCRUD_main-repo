@@ -90,14 +90,14 @@ export class CommentsService {
     }
   }
   async removeByPost(id:number[]){
-    const nestedComment=await this.dataSource.createQueryBuilder().select('nestedComment.id').from(NestedComment,'nestedComment')
-    .where('nestedComment.id IN (:...array)',{array:id}).getMany()
-    const nestedCommentId=nestedComment.map(item=>item.id)
-    await Promise.all(
-      await this.nestedCommentService.LHsremove(nestedCommentId)
-    )
-    await this.dataSource.createQueryBuilder().select('comment.id').from(Comment,'comment').delete().whereInIds(id).execute()
-    return '삭제 완료'
+    const nestedComment=await this.dataSource.createQueryBuilder()
+    .select('nestedComment.id').from(NestedComment,'nestedComment')
+    .where('nestedComment.commentId IN (:...array)',{array:id}).getMany()
+
+    await this.nestedCommentService.LHsremove(nestedComment.map(item=>item.id))
+   
+    await this.dataSource.createQueryBuilder().from(Comment,'comment')
+    .delete().whereInIds(id).execute() 
      
   }
   async getUserComment(limit:number,page:number,author:string){

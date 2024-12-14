@@ -102,6 +102,7 @@ const Comment: React.FC<CommentProps> = ({
             ) : (
               <>
                 {/*click시 commentId에 댓글 아이디 저장, nestedAppear false=>true*/}
+                {user?(
                 <button
                   onClick={() => {
                     setCommentId(data.id);
@@ -125,6 +126,7 @@ const Comment: React.FC<CommentProps> = ({
                     <button onClick={deleter}>삭제</button>
                   </>
                 ) : null}
+                ):null}
               </>
             )}
           </div>

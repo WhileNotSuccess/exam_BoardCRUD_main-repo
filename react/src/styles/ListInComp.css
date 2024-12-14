@@ -19,8 +19,7 @@ border-top: 1px solid black;
 }
 .title-board {
 box-sizing: border-box;
-min-height: 10%;
-height: 10%;
+height: auto;
 width: 100%;
 background: #f0f5ff;
 border-bottom: 1px solid rgba(4, 74, 254, 0.3);
