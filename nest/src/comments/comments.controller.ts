@@ -10,10 +10,8 @@ export class CommentsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  async create(@Body() createCommentDto: CreateCommentDto, @Req()req : any
-  ) {    
-    return await this.commentsService.create(createCommentDto,req.user.name
-    );
+  async create(@Body() createCommentDto: CreateCommentDto, @Req()req : any) {    
+    return await this.commentsService.create(createCommentDto,req.user.name);
   }
 
   @Get()
@@ -22,8 +20,8 @@ export class CommentsController {
   }
 
   @Get('search')
-  async getPostsCommentedByUser(@Query('limit') limit:number,@Query('page') page:number, @Query('content') header:string){
-    const name=header.replace('%20',' ') // %20은 URL 인코딩에서 띄어쓰기를 나타내는 문자열
+  async getPostsCommentedByUser(@Query('limit') limit:number,@Query('page') page:number, @Query('content') content:string){
+    const name=content.replace('%20',' ') // %20은 URL 인코딩에서 띄어쓰기를 나타내는 문자열
     return await this.commentsService.getUserComment(limit??10,page??1,name)
   }
 

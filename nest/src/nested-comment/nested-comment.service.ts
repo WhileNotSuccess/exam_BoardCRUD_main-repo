@@ -70,10 +70,8 @@ export class NestedCommentService {
       throw new ForbiddenException('댓글의 작성자가 아닙니다.')
     }
     const queryRunner = this.dataSource.createQueryRunner();
-
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
     try {
       await queryRunner.manager.delete(NestedComment, id);
       await queryRunner.commitTransaction();
@@ -88,8 +86,7 @@ export class NestedCommentService {
   }
 
   async LHsremove(id: number[]) { // 배열을 받고 조건은 id in 배열
-
     await this.dataSource.createQueryBuilder().from(NestedComment, "nestedComment").delete().whereInIds(id).execute()
-    
+    return '삭제 완료'
   }
 }

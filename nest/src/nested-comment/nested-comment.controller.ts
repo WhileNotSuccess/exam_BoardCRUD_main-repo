@@ -12,9 +12,7 @@ export class NestedCommentController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   async create(@Body() createNestedCommentDto: CreateNestedCommentDto, @Req() req: any) {
-    return {
-      data:  await this.nestedCommentService.create(createNestedCommentDto,req.user.name)
-    }
+    return await this.nestedCommentService.create(createNestedCommentDto,req.user.name)
   }
 
   @Get()
@@ -35,16 +33,12 @@ export class NestedCommentController {
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
   async update(@Param('id') id: number, @Body() updateNestedCommentDto: UpdateNestedCommentDto, @Req() request) {
-    
-    return {
-      data: await this.nestedCommentService.update(id, updateNestedCommentDto, request.user.name)
-    }
+    return await this.nestedCommentService.update(id, updateNestedCommentDto, request.user.name)
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async remove(@Param('id') id: number, @Req() request) {
-    return {
-      data: await this.nestedCommentService.remove(id, request.user.name)
-    }
+    return await this.nestedCommentService.remove(id, request.user.name)
   }
 }
