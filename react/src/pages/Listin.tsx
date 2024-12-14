@@ -56,28 +56,27 @@ const ListIn = () => {
     getPostAndComment();
   }, [render, id]);
 
-  const confirm = (e: FormEvent) => {
+  const confirm = async(e: FormEvent) => {
     e.preventDefault();
     if (content !== "") {
       //댓글 내용이 공백이 아닐경우 post실행, content 초기화
-      commentOn();
-      setContent("");
+      try{   //댓글 작성 함수
+        await Axios.post(`http://localhost:3012/comments`, {
+          postId: `${id}`,
+          content: content,
+        })
+        setRender(!render);
+        setContent("");
+
+      }catch(e:any){
+        if(e.response.status==401){
+          alert('로그인 후 이용해 주세요')
+        }
+      }
     }
   };
-  //댓글 작성 함수
-  const commentOn = async () => {
-    await Axios.post(`http://localhost:3012/comments`, {
-      postId: `${id}`,
-      content: content,
-    },
-    {
-      headers:{'Content-type':'application/json'}
-    }).catch((e: any) =>{
-       if(e.response.status==401){
-        alert('로그인 후 이용해 주세요')
-      }})
-    setRender(!render);
-  };
+
+
   //post-update페이지로 navigate
   const updater = () => {
     navi(`/post-update/${id}`);

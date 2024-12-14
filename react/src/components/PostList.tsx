@@ -88,7 +88,7 @@ const PostList: React.FC<PostListProps> = ({ list }) => {
             
             <div
               className="user-value"
-              onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => rightClick(e, item.author)}
+              onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => rightClick(e, item.author)} // onContextMenu : 우클릭하게 해주는 함수
               style={{ display: "inline-block" }}
             >
               {user}
