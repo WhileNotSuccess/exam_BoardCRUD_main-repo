@@ -18,7 +18,6 @@ export class PostService{
     ){}
     
     async findPostById(id:number){
-        
         const returnValue=await this.dataSource.manager.findOne(Post,{where:{id:id}})
         return {data:returnValue}
     }
@@ -66,8 +65,8 @@ export class PostService{
 
         const totalPage=Math.ceil(total/page.limit)
         const currentPage=page.page
-        const nextPage=totalPage-currentPage?`http://localhost:3012/posts?page=${currentPage+1}`:null
-        const prevPage=currentPage-1?`http://localhost:3012/posts?page=${currentPage-1}`:null
+        const nextPage=totalPage-currentPage?`http://localhost:3012/posts?limit=${page.limit}&category=${page.category}&page=${currentPage+1}`:null
+        const prevPage=currentPage-1?`http://localhost:3012/posts?limit=${page.limit}&category=${page.category}&page=${currentPage-1}`:null
         
         return search?{data:search,totalPage,currentPage,nextPage,prevPage}:null
     }
@@ -78,14 +77,14 @@ export class PostService{
             throw new ForbiddenException('작성자가 아닙니다.')
         }
         const commentsIds=await this.dataSource.createQueryBuilder()
-        .select('Comment.id').from(Comment,'Comment').where('postId = :id',{id:id}).getMany()
-
+        .select('Comment.id').from(Comment,'Comment').where('Comment.postId = :id',{id:id}).getMany()
+        const commentArray=commentsIds.map(item=>item.id)
         const queryRunner=this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
             await Promise.all(
-                commentsIds.map(async data=>await this.commentService.remove(data.id,user))
+                await this.commentService.removeByPost(commentArray)
             )
             await queryRunner.manager.delete(Post,id)
             await queryRunner.commitTransaction()
