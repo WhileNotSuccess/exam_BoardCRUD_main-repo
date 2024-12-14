@@ -102,7 +102,7 @@ const Comment: React.FC<CommentProps> = ({
             ) : (
               <>
                 {/*click시 commentId에 댓글 아이디 저장, nestedAppear false=>true*/}
-                {!user?(
+                {user?(
                 <button
                   onClick={() => {
                     setCommentId(data.id);
