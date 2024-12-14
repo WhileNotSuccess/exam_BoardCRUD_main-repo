@@ -31,8 +31,6 @@ const ListIn = () => {
   const [render, setRender] = useState<boolean>(false); // 렌더링 state
   const [comment, setComment] = useState<CommentData[]>([]); // 게시글에 달린 댓글
   const [commentId, setCommentId] = useState<number>(0); // 댓글 아이디
-  const [loading, setLoading] = useState<boolean>(true); // 로딩중임을 나타내는 state --시작시 true로 loading 중, useEffect안에서 false로 변경하면 state 변경으로 렌더링
-  const [error, setError] = useState<string>(""); // 에러임을 나타내는 state --시작시 공백(false)로 useEffect안에서 axios로 받아오는 중 error시 에러안에 글자열 저장(true)로 error표시
   const { id } = useParams<{ id: string }>(); // 게시글 id
   const navi = useNavigate();
   const {user}=useAuth()
@@ -46,52 +44,42 @@ const ListIn = () => {
         );
         setPost(post.data.data);
         setComment(comment.data.data);
-        setLoading(false);
       } catch (err) {
-        setError("error");
-        setLoading(false);
         console.error(err);
       }
     }
     getPostAndComment();
   }, [render, id]);
 
-  const confirm = (e: FormEvent) => {
+  const confirmContent = async(e: FormEvent) => {
     e.preventDefault();
     if (content !== "") {
       //댓글 내용이 공백이 아닐경우 post실행, content 초기화
-      commentOn();
-      setContent("");
+      try{   //댓글 작성 함수
+        await Axios.post(`http://localhost:3012/comments`, {
+          postId: `${id}`,
+          content: content,
+        })
+        setRender(!render);
+        setContent("");
+      }catch(e:any){
+        if(e.response.status==401){
+          alert('로그인 후 이용해 주세요')
+        }
+      }
     }
   };
-  //댓글 작성 함수
-  const commentOn = async () => {
-    await Axios.post(`http://localhost:3012/comments`, {
-      postId: `${id}`,
-      content: content,
-    },
-    {
-      headers:{'Content-type':'application/json'}
-    }).catch((e: any) =>{
-       if(e.response.status==401){
-        alert('로그인 후 이용해 주세요')
-      }})
-    setRender(!render);
-  };
   //post-update페이지로 navigate
-  const updater = () => {
+  const updatePost = () => {
     navi(`/post-update/${id}`);
   };
   // 게시글 삭제후 메인 페이지 navigate
-  const deleter = async () => {
+  const deletePost = async () => {
     await Axios.delete(`http://localhost:3012/posts/${id}`)
     .catch((e: unknown) =>console.log(e)
     );
     navi("/");
   };
-  // 로딩중일때 로딩중 표시, error가 났을때 error표시
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <>
@@ -106,8 +94,8 @@ const ListIn = () => {
           <div className="author">작성자:{post?.author}</div>
           {user?.name === post?.author ? (
             <div className="listButton">
-              <button onClick={updater}>글 수정</button>
-              <button onClick={deleter}>글 삭제</button>
+              <button onClick={updatePost}>글 수정</button>
+              <button onClick={deletePost}>글 삭제</button>
             </div>
           ) : null}
           <div id="line">
@@ -119,7 +107,7 @@ const ListIn = () => {
             <div className="input-group-prepend">
               <span className="input-gruop-text">댓글 작성 창</span>
             </div>
-            <form onSubmit={confirm}>
+            <form onSubmit={confirmContent}>
               <input
                 type="text"
                 value={content}

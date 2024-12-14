@@ -13,7 +13,7 @@ export class CategoryService{
     // 카테고리 이름 받기
     async getCategory(){
         return {
-            data:await this.dataSource.manager.find(Category)
+            data: await this.dataSource.manager.find(Category)
         };
     }
     

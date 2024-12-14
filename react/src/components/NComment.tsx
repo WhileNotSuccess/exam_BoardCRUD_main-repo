@@ -21,15 +21,15 @@ const NComment: React.FC<NestedProps> = ({
 }) => {
   const nestComment: NestedComment = data; //nestedComment 저장
   const [nestedAppear, setNestedAppear] = useState<boolean>(false); //대댓글 수정창을 띄우기위한 state
-  const [content, sContent] = useState<string>(""); //대댓글 수정내용을 저장하는 state
+  const [content, setContent] = useState<string>(""); //대댓글 수정내용을 저장하는 state
 
-  const deleter = async () => {
+  const deleteNestedComment = async () => {
     await Axios.delete(
       `http://localhost:3012/nested-comments/${nestComment?.id}`
     ).catch((e) => console.log(e));
     setRender(!render);
   };
-  const remake = async (e:FormEvent) => {
+  const remakeNestedComment = async (e:FormEvent) => {
     e.preventDefault();
     await Axios.patch(
       `http://localhost:3012/nested-comments/${nestComment?.id}`,
@@ -37,7 +37,7 @@ const NComment: React.FC<NestedProps> = ({
         content: content,
       }
     ).catch((e) => console.log(e));
-    sContent("");
+    setContent("");
     setNestedAppear(false);
     setRender(!render);
     setCommentId(0);
@@ -58,11 +58,11 @@ const NComment: React.FC<NestedProps> = ({
             <div className="nbutton">
               {nestedAppear && commentId === -1 * nestComment.id ? (
                 <>
-                  <form onSubmit={remake}>
+                  <form onSubmit={remakeNestedComment}>
                     <input
                       type="textbox"
                       value={content}
-                      onChange={(e) => sContent(e.target.value)}
+                      onChange={(e) => setContent(e.target.value)}
                     />
                     <button>완료</button>
                   </form>
@@ -77,7 +77,7 @@ const NComment: React.FC<NestedProps> = ({
                   >
                     수정
                   </button>
-                  <button onClick={deleter}>삭제</button>
+                  <button onClick={deleteNestedComment}>삭제</button>
                 </>
               )}
             </div>
