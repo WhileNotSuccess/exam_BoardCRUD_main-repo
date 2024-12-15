@@ -2,7 +2,6 @@ import React from "react";
 import "../styles/maincomp.css";
 
 interface props {
-  postPerPage:number;
   prevPage:string;
   nextPage:string;
   totalPage:number;
@@ -13,7 +12,6 @@ interface props {
 
 
 export const Pagination : React.FC<props> = ({
-  postPerPage,
   prevPage,
   nextPage,
   totalPage,

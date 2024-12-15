@@ -21,7 +21,7 @@ const UserPage = () => {
   const author = location.state;
   const [posts, setPosts] = useState([]); // 작성글 또는 댓글 데이터를 저장
   const [selectedTab, setSelectedTab] = useState("post"); // 탭 상태 ('post' 또는 'comment')
-  const postPerPage = 10; // 페이지 당 글 수
+  const postPerPage = 10; // 페이지 당 글 수(유저 페이지에선 10개로 고정)
   const [prevPage, setPrevPage] = useState(""); // 이전 페이지 URL
   const [nextPage, setNextPage] = useState(""); // 다음 페이지 URL
   const [totalPage, setTotalPage] = useState(0); // 총 페이지 수
@@ -141,7 +141,6 @@ const UserPage = () => {
       <UserInfoCompo />
       <div className="down-banner">
         <Pagination
-          postPerPage={postPerPage}
           prevPage={prevPage}
           nextPage={nextPage}
           totalPage={totalPage}

@@ -91,7 +91,6 @@ const SearchResult = () => {
       <DownSearch />
       <div className="down-banner">
         <Pagination
-          postPerPage={postPerPage}
           prevPage={prevPage}
           nextPage={nextPage}
           totalPage={totalPage}

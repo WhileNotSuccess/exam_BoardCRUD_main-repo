@@ -15,20 +15,22 @@ export const CategoryCompo = () => {
   const dispatch = useDispatch();
   const categoryList = useTypedSelector((state) => state.categoryList);
   const navigate = useNavigate();
-  const fetchCategories = async () => {
-    const { data } = await axios.get("http://localhost:3012/category");
-    
-    dispatch({ type: "CATEGORYLIST_UPLOAD", payload: data.data});
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, [dispatch]);
-
+  
   const categoryChange = (category:string) => {
     dispatch({ type: "CATEGORY_CHANGE", payload: category });
     navigate("/", { state: { category: category } });
   };
+
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data } = await axios.get("http://localhost:3012/category");
+      
+      dispatch({ type: "CATEGORYLIST_UPLOAD", payload: data.data});
+    };
+    fetchCategories()
+  }, [dispatch]);
+
 
   return (
     <div className="board-tag">
