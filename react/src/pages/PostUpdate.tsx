@@ -13,6 +13,7 @@ import {Axios} from "../lib/axios";
 import UserInfoCompo from '../components/UserInfoComp'
 import { useNavigate } from "react-router-dom";
 import {CategoryCompo} from "../components/CategoryComp";
+import { useTypedSelector } from "../useTypedSelector";
 
 // CKEditor에서 이미지 업로드를 처리하는 커스텀 업로드 어댑터
 class MyUploadAdapter {
@@ -51,11 +52,17 @@ class MyUploadAdapter {
   }
 }
 
+interface Category {
+  id: number;
+  name: string;
+}
+
 const PostUpdate: React.FC = () => {
+  const [upBoardName, setUpBoardName] = useState<string>(""); // 카테고리 이름이 담길 변수
   const { id } = useParams<{ id: string }>(); // URL에서 게시글 ID를 가져옴
   const [upTitle, setUpTitle] = useState<string>(""); // 제목 상태 변수
   const [upContent, setUpContent] = useState<string>(""); // 내용 상태 변수
-  const [boardName, setBoardName] = useState<string>("자유게시판"); // 게시판 이름 상태 변수
+  const categoryList = useTypedSelector((state)=>state.categoryList) as Category[]
 
   const { user } = useAuth(); // 사용자 인증 정보 및 로딩 상태 변수
   const navigate = useNavigate();
@@ -75,6 +82,7 @@ const PostUpdate: React.FC = () => {
         const res = await Axios.get(`http://localhost:3012/posts/${id}`);
         setUpTitle(res.data.data.title);
         setUpContent(res.data.data.content);
+        setUpBoardName(res.data.data.category)
       } catch (error) {
         console.error("게시글을 불러오지 못했습니다.", error);
       }
@@ -94,23 +102,21 @@ const PostUpdate: React.FC = () => {
   const onclick = async (id: string | undefined) => {
     // 유저가 로그인하면 string 비로그인이면 undefined이기 때문
     // 게시글 수정 요청 함수
+    if (upTitle === "" ||upContent === "") {
+      alert("제목과 내용을 입력해주세요");
+      return
+    }
     try {
       const res = await Axios.put(`http://localhost:3012/posts/${id}`, {
         title: upTitle,
         content: upContent,
-        category: boardName,
+        category: upBoardName,
       });
 
       console.log("수정 성공", res.data);
       navigate("/");
-    } catch (error) {
-      if (upTitle === "") {
-        alert("제목을 입력해주세요");
-      }
-      if (upContent === "") {
-        alert("내용을 입력해주세요");
-      }
-      console.error("수정 실패", error);
+    }catch(error){
+      console.error(error)
     }
   };
 
@@ -119,15 +125,16 @@ const PostUpdate: React.FC = () => {
       <CategoryCompo />
       <div className="test">
         <div className="post-title-board">
-          <select
-            value={boardName}
-            onChange={(e) => setBoardName(e.target.value)}
+        <select
+            value={upBoardName}
+            onChange={(e) => setUpBoardName(e.target.value)}
             className="board-select"
           >
-            <option value={"자유게시판"}>자유게시판</option>
-            <option value={"공지사항"}>공지사항</option>
-            <option value={"축제게시판"}>축제게시판</option>
-            <option value={"조원소개"}>조원소개</option>
+            {categoryList.map((category) => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
           </select>
           <input className="post-title-input" placeholder="제목" onChange={titlechange} value={upTitle} />
         </div>

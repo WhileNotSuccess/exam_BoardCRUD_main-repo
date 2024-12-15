@@ -222,10 +222,12 @@
   margin-right: 25%;
 }
 .post-date {
-  max-width: 10%;
+  max-width: 11%;
   white-space: nowrap;
   margin-left: auto;
   margin-right:2%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .category-name {
