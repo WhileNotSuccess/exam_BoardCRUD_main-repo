@@ -142,8 +142,8 @@ const MainPage: React.FC = () => {
       <DownSearch />
     </div>
     <div className="down-banner"> 
-        <Pagination // 백엔드 페이지네이션 추가 시 사용 예정
-          postPerPage={postPerPage}
+        <Pagination 
+          
           totalPage={totalPage}
           paginate={paginate}
           currentPage={currentPage}
