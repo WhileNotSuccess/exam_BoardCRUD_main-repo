@@ -63,7 +63,7 @@ export class CreateTables1734250888789 implements MigrationInterface {
               '문성윤',
               '<figure class="image"><img style="aspect-ratio:568/948;" src="https://community-while-not-success.s3.amazonaws.com/final-exam-image/a22394b0-bac1-11ef-a764-7feccf7223eb" width="568" height="948"></figure><p>이름: 문성윤</p><p>직책: 조장</p><p>관심있는 분야: 백엔드, 데이터베이스, 일본어</p><p>한마디: 4조 화이팅</p>',
               'ムンソンユン', 
-              '조별활동'
+              '조원소개'
             );
           `);
           
@@ -73,7 +73,7 @@ export class CreateTables1734250888789 implements MigrationInterface {
               '권기현',
               '<figure class="image"><img style="aspect-ratio:1080/1440;" src="https://community-while-not-success.s3.amazonaws.com/final-exam-image/00156a80-bac2-11ef-a764-7feccf7223eb" width="1080" height="1440"></figure><p>이름: 권기현</p><p>직책: 프론트엔드 개발자</p><p>관심있는 분야: 프론트엔드, SEO, 시멘틱HTML</p><p>한마디: 더욱 열심히 하겠습니다.</p>',
               'ムンソンユン', 
-              '조별활동'
+              '조원소개'
             );
           `);
           
@@ -83,7 +83,7 @@ export class CreateTables1734250888789 implements MigrationInterface {
               '최현서',
               '<figure class="image"><img style="aspect-ratio:1020/857;" src="https://community-while-not-success.s3.amazonaws.com/final-exam-image/59db5470-bac3-11ef-a764-7feccf7223eb" width="1020" height="857"></figure><p>이름: 최현서</p><p>직책: 프론트엔드 개발자</p><p>관심있는 분야: 프론트엔드, NextJS</p><p>한마디: 일본 취업 화이팅</p>',
               'ムンソンユン', 
-              '조별활동'
+              '조원소개'
             );
           `);
           
@@ -93,7 +93,7 @@ export class CreateTables1734250888789 implements MigrationInterface {
               '이한',
               '<figure class="image"><img style="aspect-ratio:354/472;" src="https://community-while-not-success.s3.amazonaws.com/final-exam-image/934c3990-bac3-11ef-a764-7feccf7223eb" width="354" height="472"></figure><p>이름: 이한</p><p>직책: 백엔드 개발자</p><p>관심있는 분야: NestJS, 쿠키, 세션, 데이터베이스</p><p>한마디: 열심히 하겠습니다.</p>',
               'ムンソンユン', 
-              '조별활동'
+              '조원소개'
             );
           `);
           
