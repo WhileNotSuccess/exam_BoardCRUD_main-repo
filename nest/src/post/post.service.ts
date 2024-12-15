@@ -80,12 +80,16 @@ export class PostService{
         const commentsIds=await this.dataSource.createQueryBuilder()
         .select('Comment.id').from(Comment,'Comment').where('Comment.postId = :target',{target:id}).getMany()
         const commentArray=commentsIds.map(item=>item.id)
-
+        
         const queryRunner=this.dataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
         try {
-            await this.commentService.removeByPost(commentArray)
+            
+            if(commentArray.length > 0){
+                
+                await this.commentService.removeByPost(commentArray)
+            }
             await queryRunner.manager.delete(Post,id)
             await queryRunner.commitTransaction()
             return {message:'finished delete'}
