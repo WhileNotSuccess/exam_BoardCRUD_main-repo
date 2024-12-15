@@ -118,7 +118,7 @@ const PostUpdate: React.FC = () => {
     <div className="post-board">
       <CategoryCompo />
       <div className="test">
-        <div className="title-board">
+        <div className="post-title-board">
           <select
             value={boardName}
             onChange={(e) => setBoardName(e.target.value)}
@@ -129,10 +129,10 @@ const PostUpdate: React.FC = () => {
             <option value={"축제게시판"}>축제게시판</option>
             <option value={"조원소개"}>조원소개</option>
           </select>
-          <input placeholder="제목" onChange={titlechange} value={upTitle} />
+          <input className="post-title-input" placeholder="제목" onChange={titlechange} value={upTitle} />
         </div>
         <div className="user-name">
-          <>작성자 : {user ? user.nick_name : "로딩 중..."}</>
+          <>작성자 : {user ? user.name : "로딩 중..."}</>
         </div>
         <div className="content-write">
           <div className="ckeditor">

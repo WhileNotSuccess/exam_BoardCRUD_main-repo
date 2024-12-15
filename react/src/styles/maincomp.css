@@ -224,9 +224,8 @@
 .post-date {
   max-width: 10%;
   white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
   margin-left: auto;
+  margin-right:2%;
 }
 
 .category-name {

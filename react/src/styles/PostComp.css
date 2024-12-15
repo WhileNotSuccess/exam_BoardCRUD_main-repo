@@ -8,7 +8,7 @@
   padding: 0 3%;
 }
 
-.title-board {
+.post-title-board {
   box-sizing: border-box;
   min-height: 10%;
   width: 100%;
@@ -17,6 +17,11 @@
   border-bottom: 1px solid rgba(4, 74, 254, 0.3);
   display: flex;
   align-items: center;
+}
+
+.post-title-input{
+  margin-left:2%;
+  width:75%
 }
 
 .user-name {
@@ -100,7 +105,7 @@
 .board-select {
   margin-left: 1%;
   width: 15%;
-  height: 40%;
+  height: 50%;
   cursor: pointer;
 }
 

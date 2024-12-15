@@ -88,7 +88,7 @@ const Post: React.FC = () => {
     setTitle(e.target.value);
   };
 
-  const onclick = async (boardName: string) => {
+  const onclick = async () => {
     if (title === "" || content === ""){
       // 사용자가 제목이나 내용을 입력하지 않았을시 실행되는 에러 구문
       alert("내용을 입력해주세요")
@@ -96,7 +96,6 @@ const Post: React.FC = () => {
     }
     
     // 게시판이름을 기준으로 글을 업로드 하는 함수
-    console.log(boardName)
     try {
       const res = await Axios.post(
         `http://localhost:3012/posts?category=${boardName}`,
@@ -104,9 +103,6 @@ const Post: React.FC = () => {
           title: title,
           content: content,
           category: boardName,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
         }
       );
 
@@ -123,7 +119,7 @@ const Post: React.FC = () => {
     <div className="post-board">
       <CategoryCompo />
       <div className="test">
-        <div className="title-board">
+        <div className="post-title-board">
           <select
             value={boardName}
             onChange={(e) => setBoardName(e.target.value)}
@@ -135,7 +131,7 @@ const Post: React.FC = () => {
               </option>
             ))}
           </select>
-          <input placeholder="제목" onChange={titlechange} />
+          <input className="post-title-input" placeholder="제목" onChange={titlechange} />
         </div>
         <div className="user-name">
           <>작성자 : {user ? user.name : "로딩 중..."}</>
@@ -160,7 +156,7 @@ const Post: React.FC = () => {
           </div>
         </div>
         <div className="btns-box">
-          <div className="upload-btn" onClick={() => onclick(boardName)}>
+          <div className="upload-btn" onClick={() => onclick()}>
             <>업로드</>
           </div>
           <div className="upload-btn" onClick={GoToMain}>
