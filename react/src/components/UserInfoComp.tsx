@@ -21,9 +21,7 @@ const UserInfoCompo : React.FC = () => {
       <a href={`${baseUrl}/auth/google/login`}>
         <img src="./images/web_neutral_rd_ctn.svg" className='google-logo'/>
       </a>
-          <Link to="/sign-in" className="logout-btn">
-            회원가입
-          </Link>
+          
         </>
     </div>
     )
