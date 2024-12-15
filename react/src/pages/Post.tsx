@@ -56,7 +56,6 @@ const Post: React.FC = () => {
   const { user, isLoading } = useAuth(); // 로그인한 유저의 정보 및 기다림을 위함
 
   useEffect(() => {
-    console.log(boardName)
     // post페이지에 처음 왔을때 사용자가 로그인 하지 않으면 메인페이지로 이동시키는 함수
     if (!isLoading && !user) {
       alert("로그인 후 이용해주세요");
@@ -91,7 +90,7 @@ const Post: React.FC = () => {
   const onclick = async () => {
     if (title === "" || content === ""){
       // 사용자가 제목이나 내용을 입력하지 않았을시 실행되는 에러 구문
-      alert("내용을 입력해주세요")
+      alert("제목과 내용을 입력해주세요")
       return
     }
     
